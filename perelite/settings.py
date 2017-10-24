@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework.authtoken',
-    'perelite_core.apps.PereliteCoreConfig'
+    'perelite_core.apps.PereliteCoreConfig',
+    'perelite_utility.apps.PereliteUtilityConfig'
 ]
 
 MIDDLEWARE = [
