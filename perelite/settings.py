@@ -122,8 +122,9 @@ STATIC_URL = '/static/'
 # CORS Setting
 CORS_ORIGIN_ALLOW_ALL = True
 
-# Mongodb Connection
+# Mongodb Configuration
 mongoengine.connect('perelite', host='localhost', port=27017)
+ITEMS_PER_PAGE = 15
 
 # Django REST FRAMEWORK
 REST_FRAMEWORK = {
