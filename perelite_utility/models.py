@@ -36,7 +36,7 @@ class Butir(Document):
     }
 
 
-class Profil(Document):
+class Profil(EmbeddedDocument):
     nip = StringField(required=True)
     pendidikan = StringField()
     instansi = StringField()
@@ -52,4 +52,4 @@ class Personil(Document):
     nama_depan = StringField()
     nama_belakang = StringField()
     email = EmailField(required=True)
-    profil = ReferenceField(Profil, reverse_delete_rule=CASCADE)
+    profil = EmbeddedDocumentField(Profil)
