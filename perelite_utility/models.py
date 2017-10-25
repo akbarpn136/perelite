@@ -31,6 +31,10 @@ class Butir(Document):
     pelaksana = StringField(required=True, choices=OPSI_PELAKSANA)
     jenis = StringField(required=True, choices=('Pendidikan', 'Kerekayasaan', 'Profesi', 'Penunjang'))
 
+    meta = {
+        'ordering': ['butir']
+    }
+
 
 class Profil(Document):
     nip = StringField(required=True)
