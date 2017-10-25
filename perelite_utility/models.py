@@ -25,7 +25,7 @@ OPSI_PELAKSANA = (
 # Create your models here.
 class Butir(Document):
     nama = StringField(required=True)
-    butir = StringField(max_length=120, required=True)
+    butir = StringField(max_length=120, required=True, unique=True)
     hasil = StringField(required=True, choices=OPSI_HASIL)
     angka = FloatField(required=True)
     pelaksana = StringField(required=True, choices=OPSI_PELAKSANA)
