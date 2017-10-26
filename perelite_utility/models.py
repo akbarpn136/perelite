@@ -1,6 +1,8 @@
 from mongoengine import *
 
 OPSI_HASIL = (
+    'Ijazah',
+    'Sertifikat',
     'Lembar Kerja',
     'Lembar Kerja/Logbook',
     'Lembar Kerja/Foto',
@@ -8,6 +10,12 @@ OPSI_HASIL = (
     'Logbook',
     'Surat Keputusan',
     'Technical Note',
+    'Buku',
+    'Makalah',
+    'Dokumen',
+    'Surat Tugas',
+    'Tanda Jasa',
+    'Penghargaan',
 )
 
 OPSI_PELAKSANA = (
