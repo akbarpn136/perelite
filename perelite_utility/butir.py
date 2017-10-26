@@ -1,8 +1,9 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from rest_framework import generics
 from . import models
+import json
 from .paginations import Pagination
-from mongoengine import ValidationError
+from mongoengine import ValidationError, NotUniqueError
 
 
 # Create your views here.
@@ -30,7 +31,12 @@ class Butir(generics.ListCreateAPIView):
         try:
             butir.save()
 
-            return JsonResponse(butir.to_json())
+            return HttpResponse(butir.to_json())
 
         except ValidationError as err:
-            return JsonResponse(err.to_dict())
+            return HttpResponse(json.dumps(err.to_dict()))
+
+        except NotUniqueError as nu:
+            return HttpResponse(json.dumps({
+                'butir': 'Tried to save duplicate unique keys'
+            }))
