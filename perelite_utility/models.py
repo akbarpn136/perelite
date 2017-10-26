@@ -54,7 +54,7 @@ class Profil(EmbeddedDocument):
 
 
 class Personil(Document):
-    username = StringField(required=True)
+    username = StringField(required=True, unique=True)
     password = StringField(required=True)
     token = StringField(required=True)
     nama_depan = StringField()
