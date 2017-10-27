@@ -35,7 +35,7 @@ class Butir(Document):
     nama = StringField(required=True)
     butir = StringField(max_length=120, required=True, unique=True)
     hasil = StringField(required=True, choices=OPSI_HASIL)
-    angka = FloatField(required=True)
+    angka = FloatField(required=True, min_value=0)
     pelaksana = StringField(required=True, choices=OPSI_PELAKSANA)
     jenis = StringField(required=True, choices=('Pendidikan', 'Kerekayasaan', 'Profesi', 'Penunjang'))
 
