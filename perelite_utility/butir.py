@@ -1,11 +1,8 @@
 from django.http import HttpResponse
 from rest_framework import generics
 from . import models
-import json
+from .helpers import (create_exception, retrieve_exception, check_instance)
 from .paginations import Pagination
-from mongoengine import (ValidationError, NotUniqueError,
-                         DoesNotExist, MultipleObjectsReturned)
-# from django.contrib.auth import hashers
 
 
 # Create your views here.
@@ -30,49 +27,21 @@ class Butir(generics.ListCreateAPIView):
             jenis=request.POST.get('jenis')
         )
 
-        try:
-            butir.save()
-
-            return HttpResponse(butir.to_json())
-
-        except ValidationError as err:
-            return HttpResponse(json.dumps(err.to_dict()))
-
-        except NotUniqueError:
-            return HttpResponse(json.dumps({
-                'detail': 'Tried to save duplicate unique keys'
-            }))
+        return create_exception(butir)
 
 
 class ButirModifikasi(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
-        try:
-            q = models.Butir.objects.get(butir=self.kwargs['butir'])
-            return q
-
-        except DoesNotExist:
-            return HttpResponse(json.dumps({
-                'detail': 'Matching query does not exist.'
-            }))
-
-        except MultipleObjectsReturned:
-            return HttpResponse(json.dumps({
-                'detail': 'Multiple object found'
-            }))
+        return retrieve_exception(models.Butir.objects.get(butir=self.kwargs['butir']))
 
     def get(self, request, *args, **kwargs):
-        butir = self.get_object()
-
-        if isinstance(butir, models.Butir):
-            return HttpResponse(butir.to_json())
-        else:
-            return butir
+        return check_instance(self.get_object(),
+                              models.Butir,
+                              self.get_object().to_json())
 
     def put(self, request, *args, **kwargs):
-        butir = self.get_object()
-
-        if isinstance(butir, models.Butir):
-            butir.update(
+        def execute():
+            return self.get_object().update(
                 set__nama=request.POST.get('nama'),
                 set__butir=request.POST.get('butir'),
                 set__hasil=request.POST.get('hasil'),
@@ -81,18 +50,14 @@ class ButirModifikasi(generics.RetrieveUpdateDestroyAPIView):
                 set__jenis=request.POST.get('jenis')
             )
 
-            butir.reload()
-
-            return HttpResponse(butir.to_json())
-
-        else:
-            return butir
+        return check_instance(self.get_object(),
+                              models.Butir,
+                              execute())
 
     def destroy(self, request, *args, **kwargs):
-        butir = self.get_object()
+        def execute():
+            return self.get_object().delete()
 
-        if isinstance(butir, models.Butir):
-            butir.delete()
-            return HttpResponse(butir.to_json())
-        else:
-            return butir
+        return check_instance(self.get_object(),
+                              models.Butir,
+                              execute())
