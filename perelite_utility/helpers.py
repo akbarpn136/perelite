@@ -25,7 +25,7 @@ def generate_key():
     return binascii.hexlify(os.urandom(20)).decode()
 
 
-def check_instance(get_object, model_class, func=None):
+def check_instance(get_object, model_class, func=''):
     if isinstance(get_object, model_class):
         if func is None:
             return HttpResponse(json.dumps({'detail': 'Document has been deleted'}))
@@ -34,7 +34,7 @@ def check_instance(get_object, model_class, func=None):
             return HttpResponse(json.dumps({'detail': 'Document has been saved'}))
 
         else:
-            return HttpResponse(func.to_json())
+            return HttpResponse(get_object.to_json())
 
     else:
         return HttpResponse(get_object)
