@@ -48,8 +48,7 @@ class ButirModifikasi(generics.RetrieveUpdateDestroyAPIView):
 
     def get(self, request, *args, **kwargs):
         return check_instance(self.get_object(),
-                              models.Butir,
-                              self.get_object())
+                              models.Butir)
 
     def put(self, request, *args, **kwargs):
         def execute():
