@@ -3,9 +3,7 @@ import binascii
 import os
 from django.http import HttpResponse
 from mongoengine import (ValidationError,
-                         NotUniqueError,
-                         DoesNotExist,
-                         MultipleObjectsReturned)
+                         NotUniqueError)
 
 
 def create_exception(prop):
@@ -23,21 +21,6 @@ def create_exception(prop):
         }))
 
 
-def retrieve_exception(query):
-    try:
-        return query
-
-    except DoesNotExist:
-        return HttpResponse(json.dumps({
-            'detail': 'Matching query does not exist.'
-        }))
-
-    except MultipleObjectsReturned:
-        return HttpResponse(json.dumps({
-            'detail': 'Multiple object found'
-        }))
-
-
 def generate_key():
     return binascii.hexlify(os.urandom(20)).decode()
 
@@ -51,7 +34,7 @@ def check_instance(get_object, model_class, func=None):
             return HttpResponse(json.dumps({'detail': 'Document has been saved'}))
 
         else:
-            return HttpResponse(func)
+            return HttpResponse(func.to_json())
 
     else:
-        return get_object
+        return HttpResponse(get_object)
