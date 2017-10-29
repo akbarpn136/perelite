@@ -1,7 +1,8 @@
+import json
 from django.http import HttpResponse
 from rest_framework import generics
 from . import models
-from .helpers import (create_exception, retrieve_exception, check_instance)
+from .helpers import (create_exception, check_instance)
 from .paginations import Pagination
 
 
@@ -32,12 +33,23 @@ class Butir(generics.ListCreateAPIView):
 
 class ButirModifikasi(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
-        return retrieve_exception(models.Butir.objects.get(butir=self.kwargs['butir']))
+        try:
+            return models.Butir.objects.get(butir=self.kwargs['butir'])
+
+        except models.Butir.DoesNotExist:
+            return json.dumps({
+                'detail': 'Matching query does not exist.'
+            })
+
+        except models.Butir.MultipleObjectsReturned:
+            return json.dumps({
+                'detail': 'Document not unique.'
+            })
 
     def get(self, request, *args, **kwargs):
         return check_instance(self.get_object(),
                               models.Butir,
-                              self.get_object().to_json())
+                              self.get_object())
 
     def put(self, request, *args, **kwargs):
         def execute():
