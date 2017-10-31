@@ -1,10 +1,10 @@
+import json
 from django.contrib.auth import hashers
 # from rest_framework.authtoken.views import obtain_auth_token
 from django.http import HttpResponse
 from rest_framework import generics
 from . import models
 from .helpers import (create_exception,
-                      retrieve_exception,
                       generate_key,
                       check_instance)
 from .paginations import Pagination
@@ -34,13 +34,39 @@ class Personil(generics.ListCreateAPIView):
 
 class PersonilModifikasi(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
-        return retrieve_exception(models.Personil.objects.get(username=self.kwargs['username']))
+        try:
+            return models.Personil.objects.get(username=self.kwargs['username'])
+
+        except models.Personil.DoesNotExist:
+            return json.dumps({
+                'detail': 'Matching query does not exist.'
+            })
+
+        except models.Personil.MultipleObjectsReturned:
+            return json.dumps({
+                'detail': 'Document not unique.'
+            })
 
     def get(self, request, *args, **kwargs):
-        return check_instance(self.get_object(), models.Personil)
+        return check_instance(self.get_object(),
+                              models.Personil)
 
     def put(self, request, *args, **kwargs):
-        return check_instance(self.get_object(), models.Personil)
+        def execute():
+            return self.get_object().update(
+                set__nama_depan=request.POST.get('nama_depan'),
+                set__nama_belakang=request.POST.get('nama_belakang'),
+                set__email=request.POST.get('email')
+            )
+
+        return check_instance(self.get_object(),
+                              models.Personil,
+                              execute())
 
     def delete(self, request, *args, **kwargs):
-        return check_instance(self.get_object(), models.Personil, self.get_object().delete())
+        def execute():
+            return self.get_object().delete()
+
+        return check_instance(self.get_object(),
+                              models.Personil,
+                              execute())
