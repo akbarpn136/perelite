@@ -4,6 +4,7 @@ import os
 from django.http import HttpResponse
 from mongoengine import (ValidationError,
                          NotUniqueError)
+from rest_framework import status
 
 
 def create_exception(prop):
@@ -13,12 +14,12 @@ def create_exception(prop):
         return HttpResponse(prop.to_json())
 
     except ValidationError as err:
-        return HttpResponse(json.dumps(err.to_dict()))
+        return HttpResponse(json.dumps(err.to_dict()), status=status.HTTP_400_BAD_REQUEST)
 
     except NotUniqueError:
         return HttpResponse(json.dumps({
             'detail': 'Tried to save duplicate unique keys'
-        }))
+        }), status=status.HTTP_400_BAD_REQUEST)
 
 
 def generate_key():
