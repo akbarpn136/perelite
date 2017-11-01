@@ -1,4 +1,8 @@
+import json
+
 from django.conf import settings
+from django.http import HttpResponse
+from rest_framework import status
 
 
 class Pagination:
@@ -27,6 +31,13 @@ class Pagination:
             page_nb = 1
 
         offset = (page_nb - 1) * settings.ITEMS_PER_PAGE
-        q = self.query.skip(offset).limit(settings.ITEMS_PER_PAGE)
 
-        return q.to_json()
+        try:
+            q = self.query.skip(offset).limit(settings.ITEMS_PER_PAGE)
+
+            return q.to_json()
+
+        except ValueError:
+            return HttpResponse(json.dumps({
+                'detail': 'Must be greater than 0'
+            }), status=status.HTTP_400_BAD_REQUEST)
