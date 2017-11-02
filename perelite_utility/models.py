@@ -62,3 +62,16 @@ class Personil(Document):
     nama_belakang = StringField()
     email = EmailField(required=True)
     profil = EmbeddedDocumentField(Profil)
+
+    def __str__(self):
+        return self.username
+
+    def is_authenticated(self):
+        return True if self.username else False
+
+    def is_superuser(self):
+        return self.super
+
+    def get_fullname(self):
+        return '%s %s' % (
+            self.nama_depan, self.nama_belakang) if self.nama_depan or self.nama_belakang else self.username
