@@ -4,6 +4,7 @@ from rest_framework import generics
 from . import models
 from .helpers import (create_exception, check_instance)
 from .paginations import Pagination
+from mongoengine import errors
 
 
 # Create your views here.
@@ -52,14 +53,20 @@ class ButirModifikasi(generics.RetrieveUpdateDestroyAPIView):
 
     def put(self, request, *args, **kwargs):
         def execute():
-            return self.get_object().update(
-                set__nama=request.POST.get('nama'),
-                set__butir=request.POST.get('butir'),
-                set__hasil=request.POST.get('hasil'),
-                set__angka=request.POST.get('angka'),
-                set__pelaksana=request.POST.get('pelaksana'),
-                set__jenis=request.POST.get('jenis')
-            )
+            try:
+                return self.get_object().update(
+                    set__nama=request.POST.get('nama'),
+                    set__butir=request.POST.get('butir'),
+                    set__hasil=request.POST.get('hasil'),
+                    set__angka=request.POST.get('angka'),
+                    set__pelaksana=request.POST.get('pelaksana'),
+                    set__jenis=request.POST.get('jenis')
+                )
+
+            except errors.ValidationError as err:
+                return json.dumps({
+                    'detail': err.message
+                })
 
         return check_instance(self.get_object(),
                               models.Butir,
