@@ -3,7 +3,9 @@ from django.contrib.auth import hashers
 # from rest_framework.authtoken.views import obtain_auth_token
 from django.http import HttpResponse
 from rest_framework import generics
+from rest_framework import exceptions
 from . import models
+from . import permissions
 from .helpers import (create_exception,
                       generate_key,
                       check_instance)
@@ -12,6 +14,8 @@ from mongoengine import errors
 
 
 class Personil(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsAdminOrLimitedAuthenticated,)
+
     def get_queryset(self):
         personil = Pagination(self.request.GET, models.Personil.objects)
 
@@ -34,19 +38,17 @@ class Personil(generics.ListCreateAPIView):
 
 
 class PersonilModifikasi(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsAdminOrLimitedAuthenticated,)
+
     def get_object(self):
         try:
             return models.Personil.objects.get(username=self.kwargs['username'])
 
         except models.Personil.DoesNotExist:
-            return json.dumps({
-                'detail': 'Matching query does not exist.'
-            })
+            raise exceptions.NotFound()
 
         except models.Personil.MultipleObjectsReturned:
-            return json.dumps({
-                'detail': 'Document not unique.'
-            })
+            raise exceptions.NotAcceptable()
 
     def get(self, request, *args, **kwargs):
         return check_instance(self.get_object(),
