@@ -8,6 +8,7 @@ from .helpers import (create_exception,
                       generate_key,
                       check_instance)
 from .paginations import Pagination
+from mongoengine import errors
 
 
 class Personil(generics.ListCreateAPIView):
@@ -53,11 +54,18 @@ class PersonilModifikasi(generics.RetrieveUpdateDestroyAPIView):
 
     def put(self, request, *args, **kwargs):
         def execute():
-            return self.get_object().update(
-                set__nama_depan=request.POST.get('nama_depan'),
-                set__nama_belakang=request.POST.get('nama_belakang'),
-                set__email=request.POST.get('email')
-            )
+            try:
+                return self.get_object().update(
+                    set__nama_depan=request.POST.get('nama_depan'),
+                    set__nama_belakang=request.POST.get('nama_belakang'),
+                    set__super=bool(request.POST.get('super')),
+                    set__email=request.POST.get('email')
+                )
+
+            except errors.ValidationError as err:
+                return json.dumps({
+                    'detail': err.message
+                })
 
         return check_instance(self.get_object(),
                               models.Personil,
