@@ -35,7 +35,10 @@ def check_instance(get_object, model_class, func=''):
             return HttpResponse(json.dumps({'detail': 'Document has been saved'}))
 
         else:
-            return HttpResponse(get_object.to_json())
+            if func:
+                return HttpResponse(func)
+            else:
+                return HttpResponse(get_object.to_json())
 
     else:
         return HttpResponse(get_object)
