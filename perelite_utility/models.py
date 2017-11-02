@@ -57,6 +57,7 @@ class Personil(Document):
     username = StringField(required=True, unique=True)
     password = StringField(required=True)
     token = StringField(required=True)
+    super = BooleanField(required=True, default=False)
     nama_depan = StringField()
     nama_belakang = StringField()
     email = EmailField(required=True)
