@@ -133,6 +133,6 @@ ITEMS_PER_PAGE = 15
 # Django REST FRAMEWORK
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        'perelite_utility.authentication.MongoTokenAuthentication',
     )
 }
