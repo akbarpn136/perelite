@@ -1,7 +1,9 @@
 import json
 from django.http import HttpResponse
 from rest_framework import generics
+from rest_framework import exceptions
 from . import models
+from . import permissions
 from .helpers import (create_exception, check_instance)
 from .paginations import Pagination
 from mongoengine import errors
@@ -9,6 +11,8 @@ from mongoengine import errors
 
 # Create your views here.
 class Butir(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsAdminOrLimitedAuthenticated,)
+
     def get_queryset(self):
         q = Pagination(self.request.GET, models.Butir.objects)
 
@@ -33,19 +37,17 @@ class Butir(generics.ListCreateAPIView):
 
 
 class ButirModifikasi(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsAdminOrLimitedAuthenticated,)
+
     def get_object(self):
         try:
             return models.Butir.objects.get(butir=self.kwargs['butir'])
 
         except models.Butir.DoesNotExist:
-            return json.dumps({
-                'detail': 'Matching query does not exist.'
-            })
+            raise exceptions.NotFound()
 
         except models.Butir.MultipleObjectsReturned:
-            return json.dumps({
-                'detail': 'Document not unique.'
-            })
+            raise exceptions.NotAcceptable()
 
     def get(self, request, *args, **kwargs):
         return check_instance(self.get_object(),
