@@ -1,9 +1,8 @@
 <template>
     <nav class="navbar is-dark is-fixed-top" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <a class="navbar-item" href="/">
-                PereLite
-            </a>
+            <router-link to="utama"
+                    class="navbar-item" exact>PereLite</router-link>
 
             <div class="navbar-burger"
                  :class="{'is-active': isActive}" @click="onBurgerClick">
@@ -17,43 +16,53 @@
              :class="{'is-active': isActive}">
             <div class="navbar-end">
                 <div class="navbar-item has-dropdown is-hoverable">
-                    <a href="#" class="navbar-link">
+                    <a class="navbar-link">
                         Tugas
                     </a>
 
                     <div class="navbar-dropdown">
-                        <a href="" class="navbar-item">
+                        <router-link to="pendidikan"
+                                     class="navbar-item"
+                                     exact-active-class="is-active">
                             <span class="icon"><i class="fa fa-graduation-cap"></i></span>
                             <span class="is-uppercase">Pendidikan</span>
-                        </a>
+                        </router-link>
 
-                        <a href="" class="navbar-item">
+                        <router-link to="kerekayasaan"
+                                     class="navbar-item"
+                                     exact-active-class="is-active">
                             <span class="icon"><i class="fa fa-paper-plane"></i></span>
                             <span class="is-uppercase">Kerekayasaan</span>
-                        </a>
+                        </router-link>
 
-                        <a href="" class="navbar-item">
+                        <router-link to="profesi"
+                                     class="navbar-item"
+                                     exact-active-class="is-active">
                             <span class="icon"><i class="fa fa-briefcase"></i></span>
                             <span class="is-uppercase">Profesi</span>
-                        </a>
+                        </router-link>
 
-                        <a href="" class="navbar-item">
+                        <router-link to="penunjang"
+                                     class="navbar-item"
+                                     exact-active-class="is-active">
                             <span class="icon"><i class="fa  fa-tasks"></i></span>
                             <span class="is-uppercase">Penunjang</span>
-                        </a>
+                        </router-link>
                     </div>
                 </div>
 
                 <div class="navbar-item has-dropdown is-hoverable">
-                    <a href="#" class="navbar-link">
+                    <a class="navbar-link">
                         Pengaturan
                     </a>
 
                     <div class="navbar-dropdown">
-                        <a href="" class="navbar-item">
+                        <router-link to="profil"
+                                     class="navbar-item"
+                                     exact-active-class="is-active">
                             <span class="icon"><i class="fa fa-user"></i></span>
-                            <span>Profil</span>
-                        </a>
+                            <span class="is-uppercase">Profil</span>
+                        </router-link>
                         <a href="" class="navbar-item">
                             <span class="icon"><i class="fa fa-sign-in"></i></span>
                             <span>Masuk</span>
