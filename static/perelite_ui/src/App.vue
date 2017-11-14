@@ -1,7 +1,11 @@
 <template>
     <div>
         <app-header></app-header>
-        <p>Lalala</p>
+        <div class="section">
+            <div class="container is-fluid">
+                <router-view></router-view>
+            </div>
+        </div>
     </div>
 </template>
 
