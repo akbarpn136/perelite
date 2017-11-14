@@ -8034,3 +8034,12 @@ label.panel-block {
 .footer {
   background-color: whitesmoke;
   padding: 3rem 1.5rem 6rem; }
+
+html {
+  min-height: 100%;
+  background: #7474BF;
+  background: -webkit-linear-gradient(to top, #348AC7, #7474BF);
+  background: -webkit-gradient(linear, left bottom, left top, from(#348AC7), to(#7474BF));
+  background: -webkit-linear-gradient(bottom, #348AC7, #7474BF);
+  background: -o-linear-gradient(bottom, #348AC7, #7474BF);
+  background: linear-gradient(to top, #348AC7, #7474BF); }
