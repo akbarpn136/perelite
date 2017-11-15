@@ -2,8 +2,12 @@
     <div>
         <app-header></app-header>
         <div class="section">
-            <div class="container is-fluid">
-                <router-view></router-view>
+            <div class="container is-fluid is-marginless">
+                <transition enterActiveClass="animated fadeInDown"
+                            mode="out-in"
+                            appear>
+                    <router-view></router-view>
+                </transition>
             </div>
         </div>
     </div>
