@@ -1,8 +1,10 @@
 <template>
     <nav class="navbar is-dark is-fixed-top" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
+        <div class="container is-fluid">
+            <div class="navbar-brand">
             <router-link to="utama"
-                    class="navbar-item" exact>PereLite</router-link>
+                         class="navbar-item" exact>PereLite
+            </router-link>
 
             <div class="navbar-burger"
                  :class="{'is-active': isActive}" @click="onBurgerClick">
@@ -12,51 +14,46 @@
             </div>
         </div>
 
-        <div class="navbar-menu"
+            <div class="navbar-menu"
              :class="{'is-active': isActive}">
             <div class="navbar-end">
-                <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link">
-                        Tugas
-                    </a>
+                <router-link to="pendidikan"
+                             class="navbar-item"
+                             exact-active-class="is-active">
+                    <span class="icon"><i class="fa fa-graduation-cap"></i></span>
+                    <span class="is-uppercase is-size-7">Pendidikan</span>
+                </router-link>
 
-                    <div class="navbar-dropdown">
-                        <router-link to="pendidikan"
-                                     class="navbar-item"
-                                     exact-active-class="is-active">
-                            <span class="icon"><i class="fa fa-graduation-cap"></i></span>
-                            <span class="is-uppercase">Pendidikan</span>
-                        </router-link>
+                <router-link to="kerekayasaan"
+                             class="navbar-item"
+                             exact-active-class="is-active">
+                    <span class="icon"><i class="fa fa-paper-plane"></i></span>
+                    <span class="is-uppercase is-size-7">Kerekayasaan</span>
+                </router-link>
 
-                        <router-link to="kerekayasaan"
-                                     class="navbar-item"
-                                     exact-active-class="is-active">
-                            <span class="icon"><i class="fa fa-paper-plane"></i></span>
-                            <span class="is-uppercase">Kerekayasaan</span>
-                        </router-link>
+                <router-link to="profesi"
+                             class="navbar-item"
+                             exact-active-class="is-active">
+                    <span class="icon"><i class="fa fa-briefcase"></i></span>
+                    <span class="is-uppercase is-size-7">Profesi</span>
+                </router-link>
 
-                        <router-link to="profesi"
-                                     class="navbar-item"
-                                     exact-active-class="is-active">
-                            <span class="icon"><i class="fa fa-briefcase"></i></span>
-                            <span class="is-uppercase">Profesi</span>
-                        </router-link>
-
-                        <router-link to="penunjang"
-                                     class="navbar-item"
-                                     exact-active-class="is-active">
-                            <span class="icon"><i class="fa  fa-tasks"></i></span>
-                            <span class="is-uppercase">Penunjang</span>
-                        </router-link>
-                    </div>
-                </div>
+                <router-link to="penunjang"
+                             class="navbar-item"
+                             exact-active-class="is-active">
+                    <span class="icon"><i class="fa  fa-tasks"></i></span>
+                    <span class="is-uppercase is-size-7">Penunjang</span>
+                </router-link>
 
                 <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link">
-                        Pengaturan
+                    <a class="navbar-link is-size-7">
+                        <span class="icon">
+                            <i class="fa fa-cogs"></i>
+                        </span>
+                        <span class="is-hidden-tablet is-uppercase">Pengaturan</span>
                     </a>
 
-                    <div class="navbar-dropdown">
+                    <div class="navbar-dropdown is-right">
                         <router-link to="profil"
                                      class="navbar-item"
                                      exact-active-class="is-active">
@@ -70,6 +67,7 @@
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </nav>
 </template>
