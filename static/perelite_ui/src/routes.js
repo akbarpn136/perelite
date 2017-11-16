@@ -1,5 +1,4 @@
 import Utama from './components/Utama.vue';
-// import Pendidikan from './components/tugas/Pendidikan.vue';
 
 const Pendidikan = (resolve) => require(['./components/tugas/Pendidikan.vue'], resolve);
 const Kerekayasaan = (resolve) => require(['./components/tugas/Kerekayasaan.vue'], resolve);
@@ -14,5 +13,5 @@ export const routes = [
     {path: '/profesi', component: Profesi, name: 'profesi'},
     {path: '/penunjang', component: Penunjang, name: 'penunjang'},
     {path: '/profil', component: Profil, name: 'profil'},
-    {path: '**', redirect: '/'},
+    {path: '**', redirect: {name: 'utama'}},
 ];
