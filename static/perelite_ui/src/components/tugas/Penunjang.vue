@@ -1,5 +1,13 @@
 <template>
-    <div class="content">
-        <p>Halaman Penunjang</p>
-    </div>
+    <app-sidebar></app-sidebar>
 </template>
+
+<script>
+    import Sidebar from './shared/Sidebar.vue';
+
+    export default {
+        components: {
+            appSidebar: Sidebar
+        }
+    }
+</script>
