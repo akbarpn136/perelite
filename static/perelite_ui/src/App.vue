@@ -3,9 +3,10 @@
         <app-header></app-header>
         <div class="section">
             <div class="container is-fluid is-marginless">
-                <transition enterActiveClass="animated fadeInDown"
+                <transition enterActiveClass="animated slideInDown"
                             mode="out-in"
-                            appear>
+                            appear
+                            duration="250">
                     <router-view></router-view>
                 </transition>
             </div>
