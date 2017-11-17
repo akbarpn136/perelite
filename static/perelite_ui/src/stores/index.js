@@ -5,16 +5,23 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        tugas: 'Pendidikan'
+        tugas: 'Pendidikan',
+        showParent: true
     },
     getters: {
         jenisTugas(state) {
             return state.tugas;
+        },
+        getShowParent(state) {
+            return state.showParent;
         }
     },
     mutations: {
         setTugas(state, jenis) {
             state.tugas = jenis;
+        },
+        setShowParent(state, value) {
+            state.showParent = value;
         }
     }
 });
