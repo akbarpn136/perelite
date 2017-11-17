@@ -14,7 +14,7 @@
             <div class="column">
                 <div class="box is-radiusless is-paddingless">
                     <nav class="panel">
-                        <p class="panel-heading">
+                        <p class="panel-heading is-radiusless">
                             Pendidikan
                         </p>
                         <a class="panel-block">
@@ -45,7 +45,7 @@
             <div class="column">
                 <div class="box is-radiusless is-paddingless">
                     <nav class="panel">
-                        <p class="panel-heading">
+                        <p class="panel-heading is-radiusless">
                             Kerekayasaan
                         </p>
                         <a class="panel-block">
@@ -76,7 +76,7 @@
             <div class="column">
                 <div class="box is-radiusless is-paddingless">
                     <nav class="panel">
-                        <p class="panel-heading">
+                        <p class="panel-heading is-radiusless">
                             Profesi
                         </p>
                         <a class="panel-block">
@@ -107,7 +107,7 @@
             <div class="column">
                 <div class="box is-radiusless is-paddingless">
                     <nav class="panel">
-                        <p class="panel-heading">
+                        <p class="panel-heading is-radiusless">
                             Penunjang
                         </p>
                         <a class="panel-block">
