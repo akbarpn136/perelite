@@ -1,7 +1,7 @@
 <template>
     <app-sidebar>
-        <app-tasks></app-tasks>
         <router-view></router-view>
+        <app-tasks v-if="isParent"></app-tasks>
     </app-sidebar>
 </template>
 
@@ -13,6 +13,21 @@
         components: {
             appSidebar: Sidebar,
             appTasks: Tasks,
+        },
+        computed: {
+            isParent() {
+                return this.$store.getters.getShowParent;
+            }
+        },
+        beforeRouteUpdate(to, from, next) {
+            if (to.name === 'pendidikan') {
+                this.$store.commit('setShowParent', true);
+            }
+
+            else {
+                this.$store.commit('setShowParent', false);
+            }
+            next();
         }
     }
 </script>
