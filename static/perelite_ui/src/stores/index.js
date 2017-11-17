@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         tugas: 'Pendidikan',
-        showParent: true
+        showParent: ''
     },
     getters: {
         jenisTugas(state) {
