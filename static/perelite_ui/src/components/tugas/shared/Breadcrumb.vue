@@ -7,14 +7,14 @@
                     <nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
                         <ul><span class="tag is-info">Lokasi:</span>
                             <li>
-                                <router-link to="utama">utama</router-link>
+                                <router-link to="utama">Utama</router-link>
                             </li>
                             <router-link :to="r.path"
                                          tag="li"
                                          v-for="r in $route.matched"
                                          :key="r.name"
                                          exact-active-class="is-active">
-                                <a>{{r.name}}</a>
+                                <a>{{r.name | splitString | capitalize}}</a>
                             </router-link>
                         </ul>
                     </nav>
@@ -41,5 +41,16 @@
 </template>
 
 <script>
-    export default {}
+    export default {
+        filters: {
+            capitalize: function (value) {
+                if (!value) return '';
+                value = value.toString();
+                return value.charAt(0).toUpperCase() + value.slice(1);
+            },
+            splitString: function (value) {
+                return value.replace(/([A-Z]+)/g, " $1").replace(/([A-Z][a-z])/g, " $1");
+            }
+        }
+    }
 </script>
