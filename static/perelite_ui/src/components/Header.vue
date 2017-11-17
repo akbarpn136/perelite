@@ -17,30 +17,30 @@
             <div class="navbar-menu"
              :class="{'is-active': isActive}">
             <div class="navbar-end">
-                <router-link to="pendidikan"
+                <router-link :to="{name: 'pendidikan'}"
                              class="navbar-item"
-                             exact-active-class="is-active">
+                             active-class="is-active">
                     <span class="icon"><i class="fa fa-graduation-cap"></i></span>
                     <span class="is-uppercase is-size-7">Pendidikan</span>
                 </router-link>
 
-                <router-link to="kerekayasaan"
+                <router-link :to="{name: 'kerekayasaan'}"
                              class="navbar-item"
-                             exact-active-class="is-active">
+                             active-class="is-active">
                     <span class="icon"><i class="fa fa-paper-plane"></i></span>
                     <span class="is-uppercase is-size-7">Kerekayasaan</span>
                 </router-link>
 
-                <router-link to="profesi"
+                <router-link :to="{name: 'profesi'}"
                              class="navbar-item"
-                             exact-active-class="is-active">
+                             active-class="is-active">
                     <span class="icon"><i class="fa fa-briefcase"></i></span>
                     <span class="is-uppercase is-size-7">Profesi</span>
                 </router-link>
 
-                <router-link to="penunjang"
+                <router-link :to="{name: 'penunjang'}"
                              class="navbar-item"
-                             exact-active-class="is-active">
+                             active-class="is-active">
                     <span class="icon"><i class="fa  fa-tasks"></i></span>
                     <span class="is-uppercase is-size-7">Penunjang</span>
                 </router-link>
