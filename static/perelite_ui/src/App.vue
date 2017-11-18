@@ -3,23 +3,23 @@
         <app-header></app-header>
         <div class="section">
             <div class="container is-fluid is-marginless">
-                <transition enterActiveClass="animated slideInDown"
-                            mode="out-in"
-                            appear
-                            duration="250">
+                <app-sidebar>
                     <router-view></router-view>
-                </transition>
+                </app-sidebar>
+                <router-view name="outer"></router-view>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import Header from './components/Header.vue'
+    import Header from './components/Header.vue';
+    import Sidebar from './components/tugas/shared/Sidebar.vue';
 
     export default {
         components: {
-            appHeader: Header
+            appHeader: Header,
+            appSidebar: Sidebar,
         }
     }
 </script>
