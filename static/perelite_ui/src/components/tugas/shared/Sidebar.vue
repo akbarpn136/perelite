@@ -4,30 +4,8 @@
             <div class="box">
                 <h3 class="title is-6">Masih kurang?</h3>
 
-                <router-link :to="{name: 'pendidikanBaru'}"
-                             class="button is-primary is-fullwidth"
-                             v-if="$route.name === 'pendidikan' || $route.name === 'pendidikanBaru'">
-                    <span class="icon"><i class="fa fa-plus-circle"></i></span>
-                    <span>Tambah</span>
-                </router-link>
-
-                <router-link :to="{name: 'kerekayasaanBaru'}"
-                             class="button is-primary is-fullwidth"
-                             v-if="$route.name === 'kerekayasaan' || $route.name === 'kerekayasaanBaru'">
-                    <span class="icon"><i class="fa fa-plus-circle"></i></span>
-                    <span>Tambah</span>
-                </router-link>
-
-                <router-link :to="{name: 'profesiBaru'}"
-                             class="button is-primary is-fullwidth"
-                             v-if="$route.name === 'profesi' || $route.name === 'profesiBaru'">
-                    <span class="icon"><i class="fa fa-plus-circle"></i></span>
-                    <span>Tambah</span>
-                </router-link>
-
-                <router-link :to="{name: 'penunjangBaru'}"
-                             class="button is-primary is-fullwidth"
-                             v-if="$route.name === 'penunjang' || $route.name === 'penunjangBaru'">
+                <router-link :to="{name: 'tugasBaru'}"
+                             class="button is-primary is-fullwidth">
                     <span class="icon"><i class="fa fa-plus-circle"></i></span>
                     <span>Tambah</span>
                 </router-link>
@@ -44,8 +22,8 @@
                         <form @submit.prevent="onProsesSuratPernyataan">
                             <div class="field">
                                 <label class="label">Tugas</label>
-                                <div class="control">
-                                    <div class="select">
+                                <div class="control is-expanded">
+                                    <div class="select is-fullwidth">
                                         <select title="Pilih jenis tugas">
                                             <option value="pendidikan">Pendidikan</option>
                                             <option value="kerekayasaan">Kerekayasaan</option>
