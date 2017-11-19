@@ -5,7 +5,7 @@
         <div class="is-pulled-left">
             <div class="level-item">
                 <p class="subtitle is-6">
-                    Perolehan angka: <strong>123</strong>
+                    Perolehan angka: <span class="tag is-info">15.2</span>
                 </p>
             </div>
         </div>
