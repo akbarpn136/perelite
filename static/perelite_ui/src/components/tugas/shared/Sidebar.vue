@@ -19,7 +19,8 @@
                 </header>
                 <div class="card-content">
                     <div class="content">
-                        <form @submit.prevent="onProsesSuratPernyataan">
+                        <form @submit.prevent="onProsesSuratPernyataan('formPernyataan')"
+                              data-vv-scope="formPernyataan">
                             <div class="field">
                                 <label class="label">Tugas</label>
                                 <div class="control is-expanded">
@@ -41,12 +42,12 @@
                                                 v-model="tglAwal"
                                                 name="tglAwal"
                                                 class="input"
-                                                :class="{'is-danger': errors.has('tglAwal')}"></flat-pickr>
+                                                :class="{'is-danger': errors.has('formPernyataan.tglAwal')}"></flat-pickr>
                                     <span class="icon is-small is-right">
                                         <i class="fa fa-calendar"></i>
                                     </span>
                                 </div>
-                                <p class="help is-danger" v-show="errors.has('tglAwal')">Tidak boleh kosong</p>
+                                <p class="help is-danger" v-show="errors.has('formPernyataan.tglAwal')">Tidak boleh kosong</p>
                             </div>
                             <div class="field">
                                 <label class="label">Tanggal akhir</label>
@@ -98,8 +99,8 @@
             appBreadcrumb: Breadcrumb
         },
         methods: {
-            onProsesSuratPernyataan() {
-                this.$validator.validateAll()
+            onProsesSuratPernyataan(scope) {
+                this.$validator.validateAll(scope)
                     .then((res) => {
                         console.log(res);
                     })
