@@ -1,11 +1,11 @@
 <template>
-    <div class="box">
+    <div class="box is-paddingless-y is-radiusless">
         <nav class="level">
             <!-- Left side -->
             <div class="level-left">
                 <div class="level-item">
                     <nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
-                        <ul><span class="tag is-info">Lokasi:</span>
+                        <ul><span class="tag is-primary"><i class="fa fa-map-marker"></i></span>
                             <router-link :to="{name: r.name}"
                                          tag="li"
                                          v-for="r in $route.matched"
@@ -35,3 +35,10 @@
         }
     }
 </script>
+
+<style scoped>
+    .box {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+</style>
