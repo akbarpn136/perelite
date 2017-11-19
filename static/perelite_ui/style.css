@@ -8043,3 +8043,19 @@ html {
   background: -webkit-linear-gradient(bottom, #348AC7, #7474BF);
   background: -o-linear-gradient(bottom, #348AC7, #7474BF);
   background: linear-gradient(to top, #348AC7, #7474BF); }
+
+.is-marginless-x {
+  margin-left: 0;
+  margin-right: 0; }
+
+.is-marginless-y {
+  margin-top: 0;
+  margin-bottom: 0; }
+
+.is-paddingless-x {
+  padding-left: 0;
+  padding-right: 0; }
+
+.is-paddingless-y {
+  padding-top: 0;
+  padding-bottom: 0; }
