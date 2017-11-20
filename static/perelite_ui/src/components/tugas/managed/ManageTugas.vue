@@ -84,7 +84,8 @@
                                        v-validate="'required|decimal'" readonly>
                             </div>
                             <p class="help"
-                               :class="{'is-danger': errors.has('formTugas.angka')}">{{errors.first('formTugas.angka')}}</p>
+                               :class="{'is-danger': errors.has('formTugas.angka')}">
+                                {{errors.first('formTugas.angka')}}</p>
                         </div>
                     </div>
                     <div class="column">
@@ -119,7 +120,8 @@
                                       v-model="uraian_singkat"></textarea>
                             </div>
                             <p class="help"
-                               :class="{'is-danger': errors.has('formTugas.uraian_singkat')}">{{errors.first('formTugas.uraian_singkat')}}
+                               :class="{'is-danger': errors.has('formTugas.uraian_singkat')}">
+                                {{errors.first('formTugas.uraian_singkat')}}
                             </p>
                         </div>
                     </div>
@@ -129,10 +131,12 @@
                         <div class="field">
                             <label class="label">Uraian Lengkap Kegiatan</label>
                             <div class="control">
-                            <textarea class="textarea"
-                                      placeholder="Berikan uraian lengkap disini"
-                                      name="uraian_lengkap" rows="20"></textarea>
+                                <vue-editor v-model="uraian_lengkap"
+                                            name="uraian_lengkap"></vue-editor>
                             </div>
+                            <p class="help is-danger" v-show="uraian_lengkap_trigger">
+                                uraian_lengkap harus diisi.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -142,7 +146,9 @@
                         <button type="submit" class="button is-link">Simpan</button>
                     </div>
                     <div class="control">
-                        <button type="button" class="button is-text">Batal</button>
+                        <button type="button"
+                                class="button is-text"
+                                @click="onButtonBatal">Batal</button>
                     </div>
                 </div>
             </form>
@@ -154,32 +160,51 @@
     import flatPickr from 'vue-flatpickr-component';
     import 'flatpickr/dist/flatpickr.css';
     import 'flatpickr/dist/themes/material_green.css';
+    import { VueEditor } from 'vue2-quill-editor'
 
     export default {
         data() {
             return {
-                tanggal: '',
-                jenis: '',
-                butir: '',
+                tanggal: null,
+                jenis: null,
+                butir: null,
                 angka: null,
-                satuan: '',
-                uraian_singkat: '',
-                uraian_lengkap: ''
+                satuan: null,
+                uraian_singkat: null,
+                uraian_lengkap: null,
+                uraian_lengkap_trigger: false
             }
         },
         created() {
             this.$store.commit('setShowParent', false);
         },
         components: {
-            flatPickr
+            flatPickr,
+            VueEditor
         },
         methods: {
             onTugasSubmit(scope) {
                 this.$validator.validateAll(scope).then((result) => {
-                    if (result) {
-                        console.log(result);
+                    if (result && this.uraian_lengkap !== null) {
+                        const obj = {
+                            'tanggal': this.tanggal,
+                            'jenis': this.jenis,
+                            'butir': this.butir,
+                            'angka': this.angka,
+                            'satuan': this.satuan,
+                            'uraian_singkat': this.uraian_singkat,
+                            'uraian_lengkap': this.uraian_lengkap,
+                        };
+                        console.log(obj);
+                    }
+
+                    else {
+                        this.uraian_lengkap_trigger = true;
                     }
                 });
+            },
+            onButtonBatal() {
+                this.$router.back();
             }
         }
     }
