@@ -22,12 +22,20 @@ export default new VueRouter({
    */
 
   mode: 'hash',
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({y: 0}),
 
   routes: [
-    { path: '/', component: load('Hello') },
+    {path: '/',
+      component: load('Utama'),
+      name: 'utama',
+      children: [
+        {path: 'pendidikan', component: load('Tugas'), name: 'pendidikan'},
+        {path: 'kerekayasaan', component: load('Tugas'), name: 'kerekayasaan'},
+        {path: 'profesi', component: load('Tugas'), name: 'profesi'},
+        {path: 'penunjang', component: load('Tugas'), name: 'penunjang'}
+      ]},
 
     // Always leave this last one
-    { path: '*', component: load('Error404') } // Not found
+    {path: '*', component: load('Error404')} // Not found
   ]
 })
