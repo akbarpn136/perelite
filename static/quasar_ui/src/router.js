@@ -32,7 +32,8 @@ export default new VueRouter({
         {path: 'pendidikan', component: load('Tugas'), name: 'pendidikan'},
         {path: 'kerekayasaan', component: load('Tugas'), name: 'kerekayasaan'},
         {path: 'profesi', component: load('Tugas'), name: 'profesi'},
-        {path: 'penunjang', component: load('Tugas'), name: 'penunjang'}
+        {path: 'penunjang', component: load('Tugas'), name: 'penunjang'},
+        {path: 'pernyataan', component: load('Pernyataan'), name: 'pernyataan'}
       ]},
 
     // Always leave this last one
