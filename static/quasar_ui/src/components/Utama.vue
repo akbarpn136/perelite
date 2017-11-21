@@ -72,33 +72,23 @@
 
         <div class="layout-padding">
             <div class="row mb-4">
-                <q-list no-border class="bg-white col-12 no-padding shadow-4">
-                    <q-item>
-                        <q-item-side>Lokasi: </q-item-side>
-                        <q-item-main>
-                            <ul class="breadcrumb">
-                                <li v-for="(r, i) in $route.matched" :key="i">
-                                    <router-link :to="{name: r.name}">
-                                        <q-icon name="home" v-if="r.name === 'utama'"/>
-                                        {{r.name | capitalize | splitString}}
-                                    </router-link>
-                                </li>
-                            </ul>
-                        </q-item-main>
-                    </q-item>
-                </q-list>
+                <app-breadcrumb></app-breadcrumb>
             </div>
 
             <div class="row">
-                <div class="col-12">
+                <div class="col-12"> {{$store.getters.getShowModalTugas}}
                     <q-transition appear
                                   enter="bounceInDown"
-                                  leave="bounceOutUp">
-                        <router-view key="komponen"/>
+                                  leave="bounceOutUp"
+                                  mode="out-in">
+                        <router-view :key="$route.name"/>
                     </q-transition>
                 </div>
             </div>
         </div>
+
+        <app-floating-action></app-floating-action>
+        <app-modal-tugas></app-modal-tugas>
     </q-layout>
 </template>
 
@@ -120,8 +110,12 @@
         QItemMain,
         QPopover,
         QSideLink,
-        QTransition
+        QTransition,
     } from 'quasar'
+
+    import appBreadcrumb from './helper/Breadcrumb.vue';
+    import appFloatingAction from './helper/FloatingAction.vue';
+    import appModalTugas from './helper/ModalTugas.vue';
 
     export default {
         name: 'utama',
@@ -139,22 +133,14 @@
             QItemMain,
             QPopover,
             QSideLink,
-            QTransition
+            QTransition,
+            appBreadcrumb,
+            appFloatingAction,
+            appModalTugas,
         },
         data() {
             return {}
-        },
-        filters: {
-            capitalize: function (value) {
-                if (!value) return '';
-                value = value.toString();
-                return value.charAt(0).toUpperCase() + value.slice(1);
-            },
-            splitString: function (value) {
-                return value.replace(/([A-Z]+)/g, " $1").replace(/([A-Z][a-z])/g, " $1");
-            }
-        },
-        computed: {}
+        }
     }
 </script>
 
