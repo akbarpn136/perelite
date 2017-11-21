@@ -1,8 +1,8 @@
 <template>
     <!-- if you want automatic padding use "layout-padding" class -->
-    <div class="layout-padding">
+    <div class="bg-white">
         <!-- your content -->
-        <q-card>
+        <q-card class="no-margin">
             <q-card-title>Surat Pernyataan</q-card-title>
             <q-card-main>
                 <q-field class="full-width"
@@ -38,7 +38,7 @@
                 </q-field>
 
                 <q-btn loader
-                       color="primary"
+                       color="primary mt-2"
                        class="full-width"
                        @click="onButtonProsesClick">
                     PROSES
