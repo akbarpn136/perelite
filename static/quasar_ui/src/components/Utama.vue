@@ -35,7 +35,7 @@
         </q-toolbar>
 
         <div slot="left">
-            <q-list no-border inset-delimiter>
+            <q-list no-border>
                 <q-list-header>Utama</q-list-header>
                 <q-side-link item :to="{name: 'pendidikan'}">
                     <q-item-side icon="school"/>
@@ -60,59 +60,20 @@
 
                 <q-item-separator></q-item-separator>
 
-                <q-list-header>Surat Pernyataan</q-list-header>
-                <q-item>
-                    <q-field class="full-width"
-                             helper="Jenis tugas"
-                             error-label="We need a valid email">
-                        <q-select
-                            stack-label="Kategori"
-                            color="secondary"
-                            separator
-                            v-model="jenis"
-                            :options="options"/>
-                    </q-field>
-                </q-item>
-                <q-item>
-                    <q-field class="full-width"
-                             helper=""
-                             error-label="Tidak boleh kosong">
-                        <q-datetime stack-label="Tanggal Awal"
-                                    v-model="tglAwal"
-                                    type="date"/>
-                    </q-field>
-                </q-item>
-                <q-item>
-                    <q-field class="full-width"
-                             helper=""
-                             error-label="Tidak boleh kosong">
-                        <q-datetime stack-label="Tanggal Akhir"
-                                    v-model="tglAkhir"
-                                    type="date"/>
-                    </q-field>
-                </q-item>
-                <q-item>
-                    <q-btn loader
-                           color="primary"
-                           class="full-width"
-                           @click="onButtonProsesClick">
-                        PROSES
-                        <span slot="loading">
-                            <q-spinner-puff class="on-left"></q-spinner-puff>
-                            PROSES
-                        </span>
-                    </q-btn>
-                </q-item>
+                <q-list-header>Pendukung</q-list-header>
+                <q-side-link item :to="{name: 'pernyataan'}">
+                    <q-item-side icon="receipt"/>
+                    <q-item-main label="Pernyataan"
+                                 sublabel="Lihat surat pernyataan"/>
+                </q-side-link>
             </q-list>
         </div>
 
-        lalal
         <router-view key="komponen"/>
     </q-layout>
 </template>
 
 <script>
-    import {required} from 'vuelidate/lib/validators'
     import {
         QLayout,
         QToolbar,
@@ -126,16 +87,11 @@
         QItemSide,
         QItemMain,
         QPopover,
-        QInput,
-        QSelect,
-        QField,
-        QSideLink,
-        QDatetime,
-        QSpinnerPuff
+        QSideLink
     } from 'quasar'
 
     export default {
-        name: 'index',
+        name: 'utama',
         components: {
             QLayout,
             QToolbar,
@@ -149,41 +105,14 @@
             QItemSide,
             QItemMain,
             QPopover,
-            QInput,
-            QSelect,
-            QField,
-            QSideLink,
-            QDatetime,
-            QSpinnerPuff
+            QSideLink
         },
         data() {
             return {
-                jenis: '',
-                tglAwal: '',
-                tglAkhir: '',
-                options: [
-                    {label: 'Pendidikan', value: 'Pendidikan'},
-                    {label: 'Kerekayasaan', value: 'Kerekayasaan'},
-                    {label: 'Profesi', value: 'Profesi'},
-                    {label: 'Penunjang', value: 'Penunjang'},
-                ]
+
             }
         },
-        validations: {},
-        computed: {},
-        methods: {
-            onButtonProsesClick(event, done) {
-                const obj = {
-                    'jenis': this.jenis,
-                    'tglAwal': this.tglAwal,
-                    'tglAkhir': this.tglAkhir,
-                }
-                setTimeout(() => {
-                    console.log(obj);
-                    done();
-                }, 2000)
-            }
-        }
+        computed: {}
     }
 </script>
 
