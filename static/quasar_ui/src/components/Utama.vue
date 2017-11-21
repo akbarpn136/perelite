@@ -18,20 +18,21 @@
                 </q-side-link>
             </q-toolbar-title>
 
-            <q-icon slot="right" name="more_vert">
-                <q-popover ref="popover" class="shadow-1">
+            <q-btn flat slot="right">
+                <q-icon name="more_vert"/>
+                <q-popover ref="popover" class="shadow-3">
                     <q-list link class="no-border">
                         <q-item @click="$refs.popover.close()">
-                            <q-item-side icon="alarm" right></q-item-side>
+                            <q-item-side icon="account circle"></q-item-side>
                             <q-item-main label="Profil"/>
                         </q-item>
                         <q-item @click="$refs.popover.close()">
-                            <q-item-side icon="input" right></q-item-side>
+                            <q-item-side icon="input"></q-item-side>
                             <q-item-main label="Masuk"/>
                         </q-item>
                     </q-list>
                 </q-popover>
-            </q-icon>
+            </q-btn>
         </q-toolbar>
 
         <div slot="left">
@@ -69,11 +70,42 @@
             </q-list>
         </div>
 
-        <router-view key="komponen"/>
+        <div class="layout-padding">
+            <div class="row mb-4">
+                <q-list no-border class="bg-white col-12 no-padding shadow-4">
+                    <q-item>
+                        <q-item-side>Lokasi: </q-item-side>
+                        <q-item-main>
+                            <ul class="breadcrumb">
+                                <li v-for="(r, i) in $route.matched" :key="i">
+                                    <router-link :to="{name: r.name}">
+                                        <q-icon name="home" v-if="r.name === 'utama'"/>
+                                        {{r.name | capitalize | splitString}}
+                                    </router-link>
+                                </li>
+                            </ul>
+                        </q-item-main>
+                    </q-item>
+                </q-list>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <q-transition appear
+                                  enter="bounceInDown"
+                                  leave="bounceOutUp">
+                        <router-view key="komponen"/>
+                    </q-transition>
+                </div>
+            </div>
+        </div>
     </q-layout>
 </template>
 
 <script>
+    import 'quasar-extras/animate/bounceInDown.css'
+    import 'quasar-extras/animate/bounceOutUp.css'
+
     import {
         QLayout,
         QToolbar,
@@ -87,7 +119,8 @@
         QItemSide,
         QItemMain,
         QPopover,
-        QSideLink
+        QSideLink,
+        QTransition
     } from 'quasar'
 
     export default {
@@ -105,16 +138,88 @@
             QItemSide,
             QItemMain,
             QPopover,
-            QSideLink
+            QSideLink,
+            QTransition
         },
         data() {
-            return {
-
+            return {}
+        },
+        filters: {
+            capitalize: function (value) {
+                if (!value) return '';
+                value = value.toString();
+                return value.charAt(0).toUpperCase() + value.slice(1);
+            },
+            splitString: function (value) {
+                return value.replace(/([A-Z]+)/g, " $1").replace(/([A-Z][a-z])/g, " $1");
             }
         },
         computed: {}
     }
 </script>
 
-<style lang="stylus">
+<style lang="sass">
+    body
+        background: #7474BF
+        /* fallback for old browsers */
+        background: -webkit-linear-gradient(to top, #348AC7, #7474BF)
+        /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to top, #348AC7, #7474BF)
+
+    .m
+        &t
+            margin-top: 5px
+            &-1
+                margin-top: 10px
+            &-2
+                margin-top: 15px
+            &-3
+                margin-top: 20px
+            &-4
+                margin-top: 25px
+            &-5
+                margin-top: 30px
+
+        &b
+            margin-bottom: 5px
+            &-1
+                margin-bottom: 10px
+            &-2
+                margin-bottom: 15px
+            &-3
+                margin-bottom: 20px
+            &-4
+                margin-bottom: 25px
+            &-5
+                margin-bottom: 30px
+
+    .p
+        &t
+            padding-top: 5px
+            &-1
+                padding-top: 10px
+            &-2
+                padding-top: 15px
+            &-3
+                padding-top: 20px
+            &-4
+                padding-top: 25px
+            &-5
+                padding-top: 30px
+
+        &b
+            padding-bottom: 5px
+            &-1
+                padding-bottom: 10px
+            &-2
+                padding-bottom: 15px
+            &-3
+                padding-bottom: 20px
+            &-4
+                padding-bottom: 25px
+            &-5
+                padding-bottom: 30px
+        &x
+            padding-left: 5px
+            padding-right: 5px
 </style>
