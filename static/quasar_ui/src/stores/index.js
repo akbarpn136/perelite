@@ -5,16 +5,16 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        tugas: 'Pendidikan'
+        showModalTugas: false
     },
     getters: {
-        jenisTugas(state) {
-            return state.tugas;
+        getShowModalTugas(state) {
+            return state.showModalTugas;
         }
     },
     mutations: {
-        setTugas(state, jenis) {
-            state.tugas = jenis;
+        setShowModalTugas(state, stats) {
+            state.showModalTugas = stats;
         }
     }
 });
