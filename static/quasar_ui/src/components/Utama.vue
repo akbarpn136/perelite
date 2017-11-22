@@ -76,7 +76,7 @@
             </div>
 
             <div class="row">
-                <div class="col-12"> {{$store.getters.getShowModalTugas}}
+                <div class="col-12">
                     <q-transition appear
                                   enter="bounceInDown"
                                   leave="bounceOutUp"
