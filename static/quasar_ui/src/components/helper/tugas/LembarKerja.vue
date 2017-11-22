@@ -6,7 +6,7 @@
                     helper=""
                     :error="$v.lk.nomor.$error"
                     icon="format list numbered"
-                    label="Nomor Tugas"
+                    label="Nomor tugas"
                     :label-width="3"
                     error-label="Harus diisi">
                     <q-input
@@ -25,7 +25,7 @@
                     helper=""
                     :error="$v.lk.referensi.$error"
                     icon="link"
-                    label="Referensi Tugas"
+                    label="Referensi tugas"
                     :label-width="3"
                     error-label="Harus diisi">
                     <q-input
@@ -41,10 +41,10 @@
         <div class="row">
             <div class="col">
                 <q-field
-                    helper="misal: L 2, ES 2.4"
+                    helper="misal: Leader 2, Engineering Staff 2.4"
                     :error="$v.lk.kode_peran.$error"
                     icon="code"
-                    label="Kode Peran"
+                    label="Peran dalam kerekayasaan"
                     :label-width="3"
                     error-label="Harus diisi">
                     <q-input
@@ -82,7 +82,7 @@
                     helper=""
                     :error="$v.lk.program.$error"
                     icon="build"
-                    label="Nama Program"
+                    label="Nama program"
                     :label-width="3"
                     error-label="Harus diisi">
                     <q-input
@@ -103,8 +103,56 @@
                     error-label="Harus diisi">
                     <vue-editor v-model="lk.uraian_lengkap"
                                 @blur="$v.lk.uraian_lengkap.$touch()"
-                                id="lk" style="height: 650px;"></vue-editor>
+                                id="lk" style="height: 650px; margin-bottom: 42px;"></vue-editor>
                 </q-field>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col">
+                <q-list separator>
+                    <q-collapsible
+                        icon="perm_identity"
+                        label="Data Pemberi Tugas" opened>
+                        <div class="row">
+                            <div class="col">
+                                <q-field
+                                    helper=""
+                                    :error="$v.lk.nama_pemberi.$error"
+                                    icon="info"
+                                    label="Nama lengkap pemberi"
+                                    :label-width="3"
+                                    error-label="Harus diisi">
+                                    <q-input
+                                        color="secondary"
+                                        float-label="Nama"
+                                        v-model="lk.nama_pemberi"
+                                        type="text"
+                                        @blur="$v.lk.nama_pemberi.$touch()">
+                                    </q-input>
+                                </q-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <q-field
+                                    helper=""
+                                    :error="$v.lk.peran_pemberi.$error"
+                                    icon="perm data setting"
+                                    label="Peran pemberi"
+                                    :label-width="3"
+                                    error-label="Harus diisi">
+                                    <q-input
+                                        color="secondary"
+                                        float-label="Peran"
+                                        v-model="lk.peran_pemberi"
+                                        type="text"
+                                        @blur="$v.lk.peran_pemberi.$touch()">
+                                    </q-input>
+                                </q-field>
+                            </div>
+                        </div>
+                    </q-collapsible>
+                </q-list>
             </div>
         </div>
     </div>
@@ -112,10 +160,12 @@
 
 <script>
     import {required} from 'vuelidate/lib/validators';
-    import { VueEditor } from 'vue2-quill-editor'
+    import {VueEditor} from 'vue2-quill-editor'
     import {
         QField,
-        QInput
+        QInput,
+        QList,
+        QCollapsible
     } from 'quasar';
 
     export default {
@@ -128,14 +178,18 @@
                     referensi: null,
                     program: null,
                     wbs_wp: null,
-                    uraian_lengkap: null
+                    uraian_lengkap: null,
+                    nama_pemberi: null,
+                    peran_pemberi: null
                 }
             }
         },
         components: {
+            VueEditor,
             QField,
             QInput,
-            VueEditor
+            QList,
+            QCollapsible
         },
         validations: {
             lk: {
@@ -145,7 +199,9 @@
                 referensi: {required},
                 program: {required},
                 wbs_wp: {required},
-                uraian_lengkap: {required}
+                uraian_lengkap: {required},
+                nama_pemberi: {required},
+                peran_pemberi: {required}
             }
         }
     }
