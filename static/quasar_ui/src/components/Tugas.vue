@@ -7,7 +7,7 @@
             <q-card-separator></q-card-separator>
             <q-card-main>
                 <div class="row mb-4 md-gutter">
-                    <div class="col">
+                    <div class="col-md-6">
                         <q-field
                             helper="Pilih data mulai tanggal"
                             :error="$v.form.tglAwal.$error"
@@ -22,7 +22,7 @@
                         </q-field>
                     </div>
 
-                    <div class="col">
+                    <div class="col-md-6">
                         <q-field
                             helper="Pilih data sampai tanggal"
                             :error="$v.form.tglAkhir.$error"
@@ -84,7 +84,8 @@
         QPagination,
         QField,
         QInput,
-        QDatetime
+        QDatetime,
+        Toast
     } from 'quasar';
 
     export default {
@@ -112,6 +113,7 @@
                     console.log('alhamdulillah');
                 } else {
                     this.$v.form.$touch();
+                    Toast.create.negative('Silahkan periksa kembali.');
                 }
             }
         },
