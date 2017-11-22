@@ -14,7 +14,8 @@
                         color="secondary"
                         separator
                         v-model="form.jenis"
-                        :options="options"></q-select>
+                        :options="options"
+                        @blur="$v.form.jenis.$touch()"></q-select>
                 </q-field>
 
                 <q-field class="full-width"
@@ -24,7 +25,8 @@
                     <q-datetime stack-label="Tanggal Awal"
                                 v-model="form.tglAwal"
                                 color="secondary"
-                                type="date"></q-datetime>
+                                type="date"
+                                @blur="$v.form.tglAwal.$touch()"></q-datetime>
                 </q-field>
 
                 <q-field class="full-width"
@@ -34,7 +36,8 @@
                     <q-datetime stack-label="Tanggal Akhir"
                                 v-model="form.tglAkhir"
                                 color="secondary"
-                                type="date"></q-datetime>
+                                type="date"
+                                @blur="$v.form.tglAkhir.$touch()"></q-datetime>
                 </q-field>
 
                 <q-btn loader
@@ -65,7 +68,8 @@
         QCard,
         QCardTitle,
         QCardMain,
-        QCardSeparator
+        QCardSeparator,
+        Toast
     } from 'quasar';
 
     export default {
@@ -119,9 +123,10 @@
                         console.log(obj);
                         done();
                     }, 2000)
+                } else {
+                    Toast.create.negative('Silahkan periksa lagi.');
+                    done();
                 }
-
-                done();
             }
         }
     }
