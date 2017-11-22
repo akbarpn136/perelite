@@ -7,7 +7,7 @@
                     <li v-for="(r, i) in $route.matched" :key="i">
                         <router-link :to="{name: r.name}">
                             <q-icon name="home" v-if="r.name === 'utama'"></q-icon>
-                            {{r.name | capitalize | splitString}}
+                            <span :class="{'xs-hide': r.name === 'utama'}">{{r.name | capitalize | splitString}}</span>
                         </router-link>
                     </li>
                 </ul>
