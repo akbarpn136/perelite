@@ -15,17 +15,17 @@ class Butir(generics.ListCreateAPIView):
 
     def get_queryset(self):
         kategori = self.kwargs.get('kategori')
-        query = models.Butir.objects
-        if kategori is 'pendidikan':
-            query = query.filter(butir__startswith='I.')
-        elif kategori is 'kerekayasaan':
-            query = query.filter(butir__startswith='II.')
-        elif kategori is 'profesi':
-            query = query.filter(butir__startswith='III.')
-        elif kategori is 'penunjang':
-            query = query.filter(butir__startswith='IV.')
+        query = models.Butir
+        if kategori == 'pendidikan':
+            query = query.objects(butir__startswith='I.')
+        elif kategori == 'kerekayasaan':
+            query = query.objects(butir__startswith='II.')
+        elif kategori == 'profesi':
+            query = query.objects(butir__startswith='III.')
+        elif kategori == 'penunjang':
+            query = query.objects(butir__startswith='IV.')
         else:
-            query = query
+            query = query.objects
 
         q = Pagination(self.request.GET, query)
 
