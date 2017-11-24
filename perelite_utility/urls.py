@@ -3,6 +3,7 @@ from . import butir, personil
 
 urlpatterns = [
     url(r'^api1/butir/$', butir.Butir.as_view()),
+    url(r'^api1/butir/(?P<kategori>\w+)/kategori/$', butir.Butir.as_view()),
     url(r'^api1/butir/(?P<butir>\w.+)/$', butir.ButirModifikasi.as_view()),
 
     url(r'^api1/personil/$', personil.Personil.as_view()),
