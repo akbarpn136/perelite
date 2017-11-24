@@ -25,11 +25,9 @@ class Butir(generics.ListCreateAPIView):
         elif kategori == 'penunjang':
             query = query.objects(butir__startswith='IV.')
         else:
-            query = query.objects
+            query = Pagination(self.request.GET, query.objects).paginate()
 
-        q = Pagination(self.request.GET, query)
-
-        return q.paginate()
+        return query
 
     def get(self, request, *args, **kwargs):
         obj = self.get_queryset()
