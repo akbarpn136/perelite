@@ -14,7 +14,20 @@ class Butir(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAdminOrLimitedAuthenticated,)
 
     def get_queryset(self):
-        q = Pagination(self.request.GET, models.Butir.objects)
+        kategori = self.kwargs.get('kategori')
+        query = models.Butir.objects
+        if kategori is 'pendidikan':
+            query = query.filter(butir__startswith='I.')
+        elif kategori is 'kerekayasaan':
+            query = query.filter(butir__startswith='II.')
+        elif kategori is 'profesi':
+            query = query.filter(butir__startswith='III.')
+        elif kategori is 'penunjang':
+            query = query.filter(butir__startswith='IV.')
+        else:
+            query = query
+
+        q = Pagination(self.request.GET, query)
 
         return q.paginate()
 
