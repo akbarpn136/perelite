@@ -17,13 +17,13 @@ class Butir(generics.ListCreateAPIView):
         kategori = self.kwargs.get('kategori')
         query = models.Butir
         if kategori == 'pendidikan':
-            query = query.objects(butir__startswith='I.')
+            query = query.objects(butir__startswith='I.').to_json()
         elif kategori == 'kerekayasaan':
-            query = query.objects(butir__startswith='II.')
+            query = query.objects(butir__startswith='II.').to_json()
         elif kategori == 'profesi':
-            query = query.objects(butir__startswith='III.')
+            query = query.objects(butir__startswith='III.').to_json()
         elif kategori == 'penunjang':
-            query = query.objects(butir__startswith='IV.')
+            query = query.objects(butir__startswith='IV.').to_json()
         else:
             query = Pagination(self.request.GET, query.objects).paginate()
 
