@@ -29,6 +29,7 @@
                         v-model="form.jenis"
                         :options="opsiJenis"
                         @blur="$v.form.jenis.$touch()"
+                        @change="onSelectKategoriChange"
                     ></q-select>
                 </q-field>
             </div>
@@ -41,9 +42,11 @@
                         color="secondary"
                         float-label="Butir Tugas"
                         v-model="form.butir"
-                        :options="opsiJenis"
+                        :options="opsiButir"
                         :filter="true"
                         @blur="$v.form.butir.$touch()"
+                        @change="onSelectButirChange"
+                        :disable="!isButirActive"
                     ></q-select>
                 </q-field>
             </div>
@@ -138,25 +141,28 @@
     } from 'quasar';
 
     import appTabsTugas from './TabsTugas.vue';
+    import {GetButir} from '../../http/butir';
 
     export default {
         data() {
             return {
+                koleksiButir: null,
                 form: {
                     tanggal: null,
                     jenis: null,
                     butir: null,
                     angka: 0.,
                     satuan: null,
-                    uraian_singkat: null,
-                    uraian_lengkap: null
+                    uraian_singkat: null
                 },
                 opsiJenis: [
                     {label: 'Pendidikan', value: 'pendidikan'},
                     {label: 'Kerekayasaan', value: 'kerekayasaan'},
                     {label: 'Profesi', value: 'profesi'},
                     {label: 'Penunjang', value: 'penunjang'},
-                ]
+                ],
+                opsiButir: [],
+                isButirActive: false
             }
         },
         validations: {
@@ -166,8 +172,7 @@
                 butir: {required},
                 angka: {required},
                 satuan: {required},
-                uraian_singkat: {required},
-                uraian_lengkap: {required}
+                uraian_singkat: {required}
             }
         },
         components: {
@@ -184,8 +189,37 @@
                 this.$v.form.$reset();
                 this.$store.commit('setShowModalTugas', false);
             },
+            onSelectKategoriChange() {
+                if (!this.isButirActive) {
+                    this.isButirActive = true;
+                }
+                this.opsiButir = [];
+                this.onGetButir(this.form.jenis);
+            },
+            onSelectButirChange() {
+                const selectedButir = this.koleksiButir.filter((el) => {
+                    return (el.butir === this.form.butir);
+                });
+
+                this.form.angka = selectedButir[0].angka;
+                this.form.satuan = selectedButir[0].hasil;
+            },
             onFormTugasSubmit() {
                 console.log('submit');
+            },
+            onGetButir(params=null) {
+                return GetButir(params).then((res) => {
+                    this.koleksiButir = res.data;
+                    res.data.forEach((btr) => {
+                        this.opsiButir.push({
+                            label: btr.nama,
+                            value: btr.butir,
+                            stamp: btr.angka.toString()
+                        });
+                    });
+                }).catch((err) => {
+                    console.log(err.response);
+                });
             }
         },
         computed: {
