@@ -101,9 +101,10 @@
                     helper="Uraian lengkap"
                     :error="false"
                     error-label="Harus diisi">
-                    <vue-editor v-model="lk.uraian_lengkap"
-                                @blur="$v.lk.uraian_lengkap.$touch()"
-                                id="lk" style="height: 650px; margin-bottom: 42px;"></vue-editor>
+                    <quill-editor v-model="lk.uraian_lengkap"
+                                  style="height: 650px; margin-bottom: 68px;"
+                                  ref="lk">
+                    </quill-editor>
                 </q-field>
             </div>
         </div>
@@ -160,7 +161,7 @@
 
 <script>
     import {required} from 'vuelidate/lib/validators';
-    import {VueEditor} from 'vue2-quill-editor'
+    import {quillEditor} from 'vue-quill-editor'
     import {
         QField,
         QInput,
@@ -185,7 +186,7 @@
             }
         },
         components: {
-            VueEditor,
+            quillEditor,
             QField,
             QInput,
             QList,
