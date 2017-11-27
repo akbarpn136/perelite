@@ -7,28 +7,28 @@
             <div class="col-md-4">
                 <q-field
                     helper="Pilih tanggal kegiatan"
-                    :error="$v.form.tanggal.$error"
+                    :error="$v.tanggal.$error"
                     error-label="Harus diisi">
                     <q-datetime
                         color="secondary"
                         float-label="Tanggal awal"
-                        v-model="form.tanggal"
+                        v-model="tanggal"
                         type="date"
-                        @blur="$v.form.tanggal.$touch()"
+                        @blur="$v.tanggal.$touch()"
                     ></q-datetime>
                 </q-field>
             </div>
             <div class="col-md-4">
                 <q-field
                     helper=""
-                    :error="$v.form.jenis.$error"
+                    :error="$v.jenis.$error"
                     error-label="Harus diisi">
                     <q-select
                         color="secondary"
                         float-label="Kategori Tugas"
-                        v-model="form.jenis"
+                        v-model="jenis"
                         :options="opsiJenis"
-                        @blur="$v.form.jenis.$touch()"
+                        @blur="$v.jenis.$touch()"
                         @change="onSelectKategoriChange"
                     ></q-select>
                 </q-field>
@@ -36,15 +36,15 @@
             <div class="col-md-4">
                 <q-field
                     helper=""
-                    :error="$v.form.butir.$error"
+                    :error="$v.butir.$error"
                     error-label="Harus diisi">
                     <q-select
                         color="secondary"
                         float-label="Butir Tugas"
-                        v-model="form.butir"
+                        v-model="butir"
                         :options="opsiButir"
                         :filter="true"
-                        @blur="$v.form.butir.$touch()"
+                        @blur="$v.butir.$touch()"
                         @change="onSelectButirChange"
                         :disable="!isButirActive"
                     ></q-select>
@@ -56,34 +56,34 @@
             <div class="col-md-6">
                 <q-field
                     helper="Angka perolehan tugas"
-                    :error="$v.form.angka.$error"
+                    :error="$v.angka.$error"
                     error-label="Harus diisi">
                     <q-input
                         color="secondary"
                         float-label="Angka"
-                        v-model="form.angka"
+                        v-model="angka"
                         type="number"
                         readonly disable :before="[
                             {icon: 'filter 9 plus', content: true}
                         ]"
-                        @blur="$v.form.angka.$touch()"
+                        @blur="$v.angka.$touch()"
                     ></q-input>
                 </q-field>
             </div>
             <div class="col-md-6">
                 <q-field
                     helper="Satuan: LK, LB, TN, Lainnya"
-                    :error="$v.form.satuan.$error"
+                    :error="$v.satuan.$error"
                     error-label="Harus diisi">
                     <q-input
                         color="secondary"
                         float-label="Satuan Hasil"
-                        v-model="form.satuan"
+                        v-model="satuan"
                         type="text"
                         readonly disable :before="[
                             {icon: 'insert drive file', content: true}
                         ]"
-                        @blur="$v.form.satuan.$touch()"
+                        @blur="$v.satuan.$touch()"
                     ></q-input>
                 </q-field>
             </div>
@@ -93,14 +93,14 @@
             <div class="col">
                 <q-field
                     helper=""
-                    :error="$v.form.uraian_singkat.$error"
+                    :error="$v.uraian_singkat.$error"
                     error-label="Harus diisi">
                     <q-input
                         color="secondary"
                         float-label="Uraian Singkat"
-                        v-model="form.uraian_singkat"
+                        v-model="uraian_singkat"
                         type="textarea"
-                        @blur="$v.form.uraian_singkat.$touch()"
+                        @blur="$v.uraian_singkat.$touch()"
                     ></q-input>
                 </q-field>
             </div>
@@ -138,7 +138,8 @@
         QField,
         QInput,
         QDatetime,
-        QSelect
+        QSelect,
+        Toast
     } from 'quasar';
 
     import appTabsTugas from './TabsTugas.vue';
@@ -148,14 +149,6 @@
         data() {
             return {
                 koleksiButir: null,
-                form: {
-                    tanggal: null,
-                    jenis: null,
-                    butir: null,
-                    angka: 0.,
-                    satuan: null,
-                    uraian_singkat: null
-                },
                 opsiJenis: [
                     {label: 'Pendidikan', value: 'pendidikan'},
                     {label: 'Kerekayasaan', value: 'kerekayasaan'},
@@ -174,14 +167,12 @@
             }
         },
         validations: {
-            form: {
-                tanggal: {required},
-                jenis: {required},
-                butir: {required},
-                angka: {required},
-                satuan: {required},
-                uraian_singkat: {required}
-            }
+            tanggal: {required},
+            jenis: {required},
+            butir: {required},
+            angka: {required},
+            satuan: {required},
+            uraian_singkat: {required}
         },
         components: {
             QBtn,
@@ -194,7 +185,11 @@
         },
         methods: {
             onModalClose() {
-                this.$v.form.$reset();
+                _.forEach(this.$store.getters.getTugasByName(), (v, k) => {
+                    if (k !== 'taskPackages') {
+                        this.$v[k].$reset();
+                    }
+                });
                 this.$store.commit('setShowModalTugas', false);
                 this.clearForm();
             },
@@ -203,19 +198,16 @@
                     this.isButirActive = true;
                 }
                 this.opsiButir = [];
-                this.onGetButir(this.form.jenis);
+                this.onGetButir(this.jenis);
             },
             onSelectButirChange() {
                 const selectedButir = _.filter(this.koleksiButir, (el) => {
-                    return (el.butir === this.form.butir);
+                    return (el.butir === this.butir);
                 });
 
-                this.form.angka = selectedButir[0].angka;
-                this.form.satuan = selectedButir[0].hasil;
-                this.checkActiveTabs(this.form.satuan);
-            },
-            onFormTugasSubmit() {
-                console.log('submit');
+                this.angka = selectedButir[0].angka;
+                this.satuan = selectedButir[0].hasil;
+                this.checkActiveTabs(this.satuan);
             },
             onGetButir(params = null) {
                 return GetButir(params).then((res) => {
@@ -278,9 +270,9 @@
 
                 _.forEach(opsi, (v) => {
                     if (v === 'angka') {
-                        this.form[v] = 0.;
+                        this.$store.commit('setTugas', {nama: v, value: 0.});
                     } else {
-                        this.form[v] = null;
+                        this.$store.commit('setTugas', {nama: v, value: null});
                     }
                 });
 
@@ -288,11 +280,68 @@
                 this.isButirActive = false;
                 this.opsiButir = [];
                 this.$store.commit('setActiveTaskTab', this.dataActiveTabs);
+            },
+            onFormTugasSubmit() {
+                let obj = this.$store.getters.getTugasByName();
+
+                let paketTugas = this.$store.getters.getTaskPackages;
+
+                if (_.isEmpty(paketTugas)) {
+                    Toast.create.negative('Minimal ada satu paket tugas, misal: LK');
+                }
             }
         },
         computed: {
             modalStats() {
                 return this.$store.getters.getShowModalTugas;
+            },
+            tanggal: {
+                get() {
+                    return this.$store.getters.getTugasByName('tanggal');
+                },
+                set(value) {
+                    this.$store.commit('setTugas', {nama: 'tanggal', value});
+                }
+            },
+            jenis: {
+                get() {
+                    return this.$store.getters.getTugasByName('jenis');
+                },
+                set(value) {
+                    this.$store.commit('setTugas', {nama: 'jenis', value});
+                }
+            },
+            butir: {
+                get() {
+                    return this.$store.getters.getTugasByName('butir');
+                },
+                set(value) {
+                    this.$store.commit('setTugas', {nama: 'butir', value});
+                }
+            },
+            angka: {
+                get() {
+                    return this.$store.getters.getTugasByName('angka');
+                },
+                set(value) {
+                    this.$store.commit('setTugas', {nama: 'angka', value});
+                }
+            },
+            satuan: {
+                get() {
+                    return this.$store.getters.getTugasByName('satuan');
+                },
+                set(value) {
+                    this.$store.commit('setTugas', {nama: 'satuan', value});
+                }
+            },
+            uraian_singkat: {
+                get() {
+                    return this.$store.getters.getTugasByName('uraian_singkat');
+                },
+                set(value) {
+                    this.$store.commit('setTugas', {nama: 'uraian_singkat', value});
+                }
             }
         }
     }
