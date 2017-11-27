@@ -130,6 +130,7 @@
 </template>
 
 <script>
+    import * as _ from 'lodash';
     import {required} from 'vuelidate/lib/validators';
     import {
         QBtn,
@@ -162,7 +163,14 @@
                     {label: 'Penunjang', value: 'penunjang'},
                 ],
                 opsiButir: [],
-                isButirActive: false
+                isButirActive: false,
+                dataActiveTabs: {
+                    TabName: null,
+                    LkActive: false,
+                    LbActive: false,
+                    TnActive: false,
+                    OthersActive: false
+                }
             }
         },
         validations: {
@@ -188,6 +196,7 @@
             onModalClose() {
                 this.$v.form.$reset();
                 this.$store.commit('setShowModalTugas', false);
+                this.clearForm();
             },
             onSelectKategoriChange() {
                 if (!this.isButirActive) {
@@ -197,20 +206,21 @@
                 this.onGetButir(this.form.jenis);
             },
             onSelectButirChange() {
-                const selectedButir = this.koleksiButir.filter((el) => {
+                const selectedButir = _.filter(this.koleksiButir, (el) => {
                     return (el.butir === this.form.butir);
                 });
 
                 this.form.angka = selectedButir[0].angka;
                 this.form.satuan = selectedButir[0].hasil;
+                this.checkActiveTabs(this.form.satuan);
             },
             onFormTugasSubmit() {
                 console.log('submit');
             },
-            onGetButir(params=null) {
+            onGetButir(params = null) {
                 return GetButir(params).then((res) => {
                     this.koleksiButir = res.data;
-                    res.data.forEach((btr) => {
+                    _.forEach(res.data, (btr) => {
                         this.opsiButir.push({
                             label: btr.nama,
                             value: btr.butir,
@@ -220,6 +230,64 @@
                 }).catch((err) => {
                     console.log(err.response);
                 });
+            },
+            checkActiveTabs(cond) {
+                switch (cond) {
+                    case 'Lembar Kerja':
+                        this.setTabs('lk', true, false, false, false);
+
+                        break;
+                    case 'Lembar Kerja/Logbook':
+                        this.setTabs('lk', true, true, false, false);
+
+                        break;
+                    case 'Lembar Kerja/Foto':
+                        this.setTabs('lk', true, false, false, false);
+
+                        break;
+                    case 'Benda Kerja/Lembar Kerja':
+                        this.setTabs('lk', true, false, false, false);
+
+                        break;
+                    case 'Logbook':
+                        this.setTabs('lb', false, true, false, false);
+
+                        break;
+                    case 'Technical Note':
+                        this.setTabs('tn', false, false, true, false);
+
+                        break;
+                    default:
+                        this.setTabs('ot', false, false, false, true);
+                }
+                this.$store.commit('setActiveTaskTab', this.dataActiveTabs);
+            },
+            setTabs(TabName=null,
+                    LkActive=false,
+                    LbActive=false,
+                    TnActive=false,
+                    OthersActive=false) {
+                let opsi = {TabName, LkActive, LbActive, TnActive, OthersActive};
+
+                _.forEach(opsi, (v, k) => {
+                    this.dataActiveTabs[k] = v;
+                });
+            },
+            clearForm() {
+                let opsi = ['tanggal', 'jenis', 'butir', 'angka', 'satuan', 'uraian_singkat'];
+
+                _.forEach(opsi, (v) => {
+                    if (v === 'angka') {
+                        this.form[v] = 0.;
+                    } else {
+                        this.form[v] = null;
+                    }
+                });
+
+                this.setTabs();
+                this.isButirActive = false;
+                this.opsiButir = [];
+                this.$store.commit('setActiveTaskTab', this.dataActiveTabs);
             }
         },
         computed: {
