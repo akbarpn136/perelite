@@ -52,8 +52,12 @@ export default new Vuex.Store({
         getTaskPackages(state) {
             return state.tugas.taskPackages;
         },
-        getLk(state) {
-            return state.lk;
+        getLkByName: (state) => (name) => {
+            if (name) {
+                return state.lk[name];
+            } else {
+                return state.lk;
+            }
         }
     },
     mutations: {
@@ -84,7 +88,7 @@ export default new Vuex.Store({
             state.tugas[payload.nama] = payload.value;
         },
         setLk(state, payload) {
-            state.lk[payload.name] = payload.value;
+            state.lk[payload.nama] = payload.value;
         }
     }
 });
