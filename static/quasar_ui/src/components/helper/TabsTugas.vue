@@ -1,15 +1,15 @@
 <template>
-    <q-tabs color="deep-orange-5" align="justify">
-        <q-tab default name="lk" slot="title" icon="note" label="Lembar Kerja"></q-tab>
-        <q-tab name="lb" slot="title" icon="history" label="Logbook"></q-tab>
-        <q-tab name="tn" slot="title" icon="movie" label="Technical Note"></q-tab>
-        <q-tab name="ot" slot="title" icon="explore" label="Lainnya"></q-tab>
+    <q-tabs v-model="setActiveTask.TabName" color="deep-orange-5" align="justify">
+        <q-tab name="lk" slot="title" :disable="!setActiveTask.LkActive" icon="note" label="Lembar Kerja"></q-tab>
+        <q-tab name="lb" slot="title" :disable="!setActiveTask.LbActive" icon="history" label="Logbook"></q-tab>
+        <q-tab name="tn" slot="title" :disable="!setActiveTask.TnActive" icon="movie" label="Technical Note"></q-tab>
+        <q-tab name="ot" slot="title" :disable="!setActiveTask.OthersActive" icon="explore" label="Lainnya"></q-tab>
 
         <q-tab-pane name="lk">
             <app-lk></app-lk>
         </q-tab-pane>
         <q-tab-pane name="lb">Logbook</q-tab-pane>
-        <q-tab-pane name="tn">Techinical note</q-tab-pane>
+        <q-tab-pane name="tn">Technical note</q-tab-pane>
         <q-tab-pane name="ot">Konten lainnya</q-tab-pane>
     </q-tabs>
 </template>
@@ -28,7 +28,8 @@
 
     export default {
         data() {
-            return {}
+            return {
+            }
         },
         components: {
             QTabs,
@@ -38,6 +39,11 @@
             appLb,
             appTn,
             appOthers,
+        },
+        computed: {
+            setActiveTask() {
+                return this.$store.getters.getActiveTaskTab;
+            }
         }
     }
 </script>
