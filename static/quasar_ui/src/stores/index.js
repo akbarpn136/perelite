@@ -6,7 +6,14 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         showModalTugas: false,
-        taskPackages: []
+        taskPackages: [],
+        ActiveTaskTab: {
+            TabName: null,
+            LkActive: false,
+            LbActive: false,
+            TnActive: false,
+            OthersActive: false
+        }
     },
     getters: {
         getShowModalTugas(state) {
@@ -14,6 +21,9 @@ export default new Vuex.Store({
         },
         getTaskPackages(state) {
             return state.taskPackages;
+        },
+        getActiveTaskTab(state) {
+            return state.ActiveTaskTab;
         }
     },
     mutations: {
@@ -22,6 +32,16 @@ export default new Vuex.Store({
         },
         setTaskPackages(state, payload) {
             state.taskPackages.push(payload);
+        },
+        clearTaskPackages(state) {
+            state.taskPackages = [];
+        },
+        setActiveTaskTab(state, payload) {
+            state.ActiveTaskTab.TabName = payload.TabName;
+            state.ActiveTaskTab.LkActive = payload.LkActive;
+            state.ActiveTaskTab.LbActive = payload.LbActive;
+            state.ActiveTaskTab.TnActive = payload.TnActive;
+            state.ActiveTaskTab.OthersActive = payload.OthersActive;
         }
     }
 });
