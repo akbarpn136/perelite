@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex';
 import * as _ from 'lodash';
+import {lk, getLkByName} from './tugas/lk';
+import {tugas, getTugasByName} from './tugas/tugas';
 
 Vue.use(Vuex);
 
@@ -14,26 +16,8 @@ export default new Vuex.Store({
             TnActive: false,
             OthersActive: false
         },
-        tugas: {
-            tanggal: null,
-            jenis: null,
-            butir: null,
-            angka: 0.,
-            satuan: null,
-            uraian_singkat: null,
-            taskPackages: []
-        },
-        lk: {
-            nama: 'LEMBAR KERJA',
-            kode_peran: null,
-            nomor: null,
-            referensi: null,
-            program: null,
-            wbs_wp: null,
-            uraian_lengkap: null,
-            nama_pemberi: null,
-            peran_pemberi: null
-        }
+        tugas,
+        lk
     },
     getters: {
         getShowModalTugas(state) {
@@ -42,36 +26,24 @@ export default new Vuex.Store({
         getActiveTaskTab(state) {
             return state.ActiveTaskTab;
         },
-        getTugasByName: (state) => (name) => {
-            if (name) {
-                return state.tugas[name];
-            } else {
-                return state.tugas;
-            }
-        },
         getTaskPackages(state) {
             return state.tugas.taskPackages;
         },
-        getLkByName: (state) => (name) => {
-            if (name) {
-                return state.lk[name];
-            } else {
-                return state.lk;
-            }
-        }
+        getTugasByName,
+        getLkByName
     },
     mutations: {
         setShowModalTugas(state, stats) {
             state.showModalTugas = stats;
         },
-        setTaskPackages(state, key, payload) {
-            let match = _.find(state.tugas.taskPackages, key);
+        setTaskPackages(state, data) {
+            let match = _.find(state.tugas.taskPackages, data.key);
 
             if (match) {
                 let index = _.indexOf(state.tugas.taskPackages, match);
-                state.tugas.taskPackages.splice(index, 1, payload);
+                state.tugas.taskPackages.splice(index, 1, data.payload);
             } else {
-                state.tugas.taskPackages.push(payload);
+                state.tugas.taskPackages.push(data.payload);
             }
         },
         clearTaskPackages(state) {
