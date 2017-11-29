@@ -12,4 +12,7 @@
 export default {}
 </script>
 
-<style></style>
+<style lang="sass">
+    .layout-padding
+        padding: 1.4rem 1rem
+</style>
