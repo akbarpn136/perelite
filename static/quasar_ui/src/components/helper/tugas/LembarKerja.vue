@@ -14,7 +14,7 @@
                         float-label="Penomoran"
                         v-model="nomor"
                         type="text"
-                        @blur="$v.nomor.$touch()">
+                        @blur="$v.nomor.$touch(), addToTaskPackage('nomor')">
                     </q-input>
                 </q-field>
             </div>
@@ -33,7 +33,7 @@
                         float-label="Referensi"
                         v-model="referensi"
                         type="text"
-                        @blur="$v.referensi.$touch()">
+                        @blur="$v.referensi.$touch(), addToTaskPackage('referensi')">
                     </q-input>
                 </q-field>
             </div>
@@ -52,7 +52,7 @@
                         float-label="Peran"
                         v-model="kode_peran"
                         type="text"
-                        @blur="$v.kode_peran.$touch()">
+                        @blur="$v.kode_peran.$touch(), addToTaskPackage('kode_peran')">
                     </q-input>
                 </q-field>
             </div>
@@ -71,7 +71,7 @@
                         float-label="Kelompok"
                         v-model="wbs_wp"
                         type="text"
-                        @blur="$v.wbs_wp.$touch()">
+                        @blur="$v.wbs_wp.$touch(), addToTaskPackage('wbs_wp')">
                     </q-input>
                 </q-field>
             </div>
@@ -90,7 +90,7 @@
                         float-label="Program"
                         v-model="program"
                         type="text"
-                        @blur="$v.program.$touch()">
+                        @blur="$v.program.$touch(), addToTaskPackage('program')">
                     </q-input>
                 </q-field>
             </div>
@@ -102,6 +102,7 @@
                     :error="false"
                     error-label="Harus diisi">
                     <quill-editor v-model="uraian_lengkap"
+                                  @blur="addToTaskPackage('uraian_lengkap')"
                                   style="height: 650px; margin-bottom: 68px;"
                                   ref="lk">
                     </quill-editor>
@@ -128,7 +129,7 @@
                                         float-label="Nama"
                                         v-model="nama_pemberi"
                                         type="text"
-                                        @blur="$v.nama_pemberi.$touch()">
+                                        @blur="$v.nama_pemberi.$touch(), addToTaskPackage('nama_pemberi')">
                                     </q-input>
                                 </q-field>
                             </div>
@@ -147,7 +148,7 @@
                                         float-label="Peran"
                                         v-model="peran_pemberi"
                                         type="text"
-                                        @blur="$v.peran_pemberi.$touch()">
+                                        @blur="$v.peran_pemberi.$touch(), addToTaskPackage('peran_pemberi')">
                                     </q-input>
                                 </q-field>
                             </div>
@@ -170,9 +171,8 @@
     } from 'quasar';
 
     export default {
-        data() {
-            return {
-            }
+        created() {
+            this.$store.commit('setLk', {nama:'validasi', value: this.$v});
         },
         components: {
             quillEditor,
@@ -187,7 +187,6 @@
             referensi: {required},
             program: {required},
             wbs_wp: {required},
-            uraian_lengkap: {required},
             nama_pemberi: {required},
             peran_pemberi: {required}
         },
@@ -256,6 +255,29 @@
                     this.$store.commit('setLk', {nama: 'peran_pemberi', value});
                 }
             },
+        },
+        methods: {
+            addToTaskPackage(info) {
+                let key = {nama: 'LEMBAR KERJA'};
+                let payload = {
+                    nama: 'LEMBAR KERJA',
+                    kode_peran: this.kode_peran,
+                    nomor: this.nomor,
+                    referensi: this.referensi,
+                    program: this.program,
+                    wbs_wp: this.wbs_wp,
+                    uraian_lengkap: this.uraian_lengkap,
+                    nama_pemberi: this.nama_pemberi,
+                    peran_pemberi: this.peran_pemberi,
+                };
+
+                this.$store.commit('setLk', {nama:'validasi', value: null});
+                this.$store.commit('setLk', {nama:'validasi', value: this.$v});
+
+                if (info !== 'uraian_lengkap' && !this.$v[info].$error) {
+                    this.$store.commit('setTaskPackages', {key, payload});
+                }
+            }
         }
     }
 </script>
