@@ -148,6 +148,7 @@
     export default {
         data() {
             return {
+                opsi: ['tanggal', 'jenis', 'butir', 'angka', 'satuan', 'uraian_singkat'],
                 koleksiButir: null,
                 opsiJenis: [
                     {label: 'Pendidikan', value: 'pendidikan'},
@@ -185,11 +186,7 @@
         },
         methods: {
             onModalClose() {
-                _.forEach(this.$store.getters.getTugasByName(), (v, k) => {
-                    if (k !== 'taskPackages') {
-                        this.$v[k].$reset();
-                    }
-                });
+                this.$v.$reset();
                 this.$store.commit('setShowModalTugas', false);
                 this.clearForm();
             },
@@ -198,6 +195,7 @@
                     this.isButirActive = true;
                 }
                 this.opsiButir = [];
+                this.clearTaskPackage();
                 this.onGetButir(this.jenis);
             },
             onSelectButirChange() {
@@ -266,9 +264,7 @@
                 });
             },
             clearForm() {
-                let opsi = ['tanggal', 'jenis', 'butir', 'angka', 'satuan', 'uraian_singkat'];
-
-                _.forEach(opsi, (v) => {
+                _.forEach(this.opsi, (v) => {
                     if (v === 'angka') {
                         this.$store.commit('setTugas', {nama: v, value: 0.});
                     } else {
@@ -277,17 +273,37 @@
                 });
 
                 this.setTabs();
+                this.clearTaskPackage();
                 this.isButirActive = false;
                 this.opsiButir = [];
                 this.$store.commit('setActiveTaskTab', this.dataActiveTabs);
             },
+            clearTaskPackage() {
+                this.$store.commit('clearTaskPackages');
+                let lk = this.$store.getters.getLkByName();
+                _.forEach(lk, (v, k) => {
+                    if (v !== 'LEMBAR KERJA') {
+                        this.$store.commit('setLk', {nama: k, value: null});
+                    }
+                });
+            },
             onFormTugasSubmit() {
                 let obj = this.$store.getters.getTugasByName();
-
                 let paketTugas = this.$store.getters.getTaskPackages;
+                let validasiLk = this.$store.getters.getLkByName('validasi');
 
-                if (_.isEmpty(paketTugas)) {
-                    Toast.create.negative('Minimal ada satu paket tugas, misal: LK');
+                this.$v.$touch();
+                if (validasiLk) validasiLk.$touch();
+
+                if (!this.$v.$invalid) {
+                    if (validasiLk && !validasiLk.$invalid) {
+                        console.log(obj);
+                    } else {
+                        Toast.create.negative('Perbaiki kesalahan yang terjadi.');
+                    }
+
+                } else {
+                    Toast.create.negative('Perbaiki kesalahan yang terjadi.');
                 }
             }
         },
