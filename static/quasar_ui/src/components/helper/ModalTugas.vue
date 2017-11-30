@@ -1,6 +1,5 @@
 <template>
-    <q-modal v-model="modalStats" maximized
-             :content-classes="['layout-padding', 'pt-3']">
+    <div class="layout-padding bg-white">
         <h4>Form Tugas</h4>
 
         <div class="row md-gutter">
@@ -120,13 +119,13 @@
                     Simpan
                 </q-btn>
                 <q-btn color="grey-5"
-                       @click="onModalClose"
+                       @click="onBatalClick()"
                        icon="not interested">
                     Batal
                 </q-btn>
             </div>
         </div>
-    </q-modal>
+    </div>
 </template>
 
 <script>
@@ -134,7 +133,6 @@
     import {required} from 'vuelidate/lib/validators';
     import {
         QBtn,
-        QModal,
         QField,
         QInput,
         QDatetime,
@@ -148,6 +146,7 @@
     export default {
         data() {
             return {
+                modalStats: true,
                 opsi: ['tanggal', 'jenis', 'butir', 'angka', 'satuan', 'uraian_singkat'],
                 koleksiButir: null,
                 opsiJenis: [
@@ -177,7 +176,6 @@
         },
         components: {
             QBtn,
-            QModal,
             QField,
             QInput,
             QDatetime,
@@ -185,10 +183,10 @@
             appTabsTugas
         },
         methods: {
-            onModalClose() {
+            onBatalClick() {
                 this.$v.$reset();
-                this.$store.commit('setShowModalTugas', false);
                 this.clearForm();
+                this.$router.go(-1);
             },
             onSelectKategoriChange() {
                 if (!this.isButirActive) {
@@ -308,9 +306,6 @@
             }
         },
         computed: {
-            modalStats() {
-                return this.$store.getters.getShowModalTugas;
-            },
             tanggal: {
                 get() {
                     return this.$store.getters.getTugasByName('tanggal');
