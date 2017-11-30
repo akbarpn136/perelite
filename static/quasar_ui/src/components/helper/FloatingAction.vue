@@ -30,7 +30,7 @@
         },
         methods: {
             onTugasClick() {
-                this.$store.commit('setShowModalTugas', true);
+                this.$router.push({name: 'tugas'});
             }
         }
     }
