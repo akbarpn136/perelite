@@ -29,6 +29,7 @@ export default new VueRouter({
       component: load('Utama'),
       name: 'utama',
       children: [
+        {path: 'tugas', component: load('helper/ModalTugas'), name: 'tugas'},
         {path: 'pendidikan', component: load('Tugas'), name: 'pendidikan'},
         {path: 'kerekayasaan', component: load('Tugas'), name: 'kerekayasaan'},
         {path: 'profesi', component: load('Tugas'), name: 'profesi'},
