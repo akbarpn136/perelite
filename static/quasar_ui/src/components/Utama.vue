@@ -88,7 +88,6 @@
         </div>
 
         <app-floating-action></app-floating-action>
-        <app-modal-tugas></app-modal-tugas>
     </q-layout>
 </template>
 
@@ -115,7 +114,6 @@
 
     import appBreadcrumb from './helper/Breadcrumb.vue';
     import appFloatingAction from './helper/FloatingAction.vue';
-    import appModalTugas from './helper/ModalTugas.vue';
 
     export default {
         name: 'utama',
@@ -135,8 +133,7 @@
             QSideLink,
             QTransition,
             appBreadcrumb,
-            appFloatingAction,
-            appModalTugas,
+            appFloatingAction
         },
         data() {
             return {}
