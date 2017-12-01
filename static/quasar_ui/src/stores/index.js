@@ -8,7 +8,6 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        showModalTugas: false,
         ActiveTaskTab: {
             TabName: null,
             LkActive: false,
@@ -20,9 +19,6 @@ export default new Vuex.Store({
         lk
     },
     getters: {
-        getShowModalTugas(state) {
-            return state.showModalTugas;
-        },
         getActiveTaskTab(state) {
             return state.ActiveTaskTab;
         },
@@ -33,9 +29,6 @@ export default new Vuex.Store({
         getLkByName
     },
     mutations: {
-        setShowModalTugas(state, stats) {
-            state.showModalTugas = stats;
-        },
         setTaskPackages(state, data) {
             let match = _.find(state.tugas.taskPackages, data.key);
 
