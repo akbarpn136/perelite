@@ -142,6 +142,7 @@
 
     import appTabsTugas from './TabsTugas.vue';
     import {GetButir} from '../../http/butir';
+    import {TambahTugas} from '../../http/tugas';
 
     export default {
         data() {
@@ -294,8 +295,28 @@
                 if (validasiLk) validasiLk.$touch();
 
                 if (!this.$v.$invalid) {
+                    let paket = [];
                     if (validasiLk && !validasiLk.$invalid) {
-                        console.log(obj);
+                        _.forEach(obj.taskPackages, (v) => {
+                            paket.push(JSON.stringify(v));
+                        });
+
+                        let payload = new FormData();
+                        payload.append('tanggal', obj.tanggal.toLocaleDateString());
+                        payload.append('kategori', obj.jenis);
+                        payload.append('butir', obj.butir);
+                        payload.append('angka', obj.angka);
+                        payload.append('satuan', obj.satuan);
+                        payload.append('uraian_singkat', obj.uraian_singkat);
+                        payload.append('paket_tugas', JSON.stringify(paket));
+
+                        TambahTugas(payload).then((res) => {
+                            console.log(res.data)
+                        }).catch((err) => {
+                            _.forEach(err.response.data, (v, k) => {
+                                Toast.create.negative(`${k}: ${v}`);
+                            });
+                        });
                     } else {
                         Toast.create.negative('Perbaiki kesalahan yang terjadi.');
                     }
