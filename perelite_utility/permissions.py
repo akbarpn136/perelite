@@ -16,6 +16,15 @@ class IsAdmin(permissions.BasePermission):
             raise exceptions.PermissionDenied()
 
 
+class IsAuthenticated(permissions.BasePermission):
+    def has_permission(self, request, view):
+        try:
+            return _user(request.user.username).is_authenticated()
+
+        except models.Personil.DoesNotExist:
+            raise exceptions.PermissionDenied()
+
+
 class IsAdminOrLimitedAuthenticated(permissions.BasePermission):
     def has_permission(self, request, view):
         try:
