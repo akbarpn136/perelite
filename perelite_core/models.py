@@ -1,4 +1,5 @@
 from mongoengine import *
+from perelite_utility.models import Personil
 
 OPSI_PELAKSANA = (
     'pendidikan',
@@ -22,6 +23,7 @@ class Lk(EmbeddedDocument):
 
 class Tugas(Document):
     tanggal = DateTimeField(required=True)
+    owner = ReferenceField(Personil, reverse_delete_rule=CASCADE)
     kategori = StringField(required=True, choices=OPSI_PELAKSANA)
     butir = StringField(required=True)
     angka = DecimalField(required=True, min_value=0)
