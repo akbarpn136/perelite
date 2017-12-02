@@ -22,9 +22,11 @@ class Tugas(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         pkt = json.loads(request.POST.get('paket_tugas'))
+        user = models.Personil.objects.get(username=request.user.username)
 
         tugas = models.Tugas(
             tanggal=request.POST.get('tanggal'),
+            owner=user.username,
             kategori=request.POST.get('kategori'),
             butir=request.POST.get('butir'),
             angka=request.POST.get('angka'),
