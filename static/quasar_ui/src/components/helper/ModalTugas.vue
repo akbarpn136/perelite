@@ -311,7 +311,7 @@
                         payload.append('paket_tugas', JSON.stringify(paket));
 
                         TambahTugas(payload).then((res) => {
-                            console.log(res.data)
+                            Toast.create.positive('Tugas berhasil disimpan.');
                         }).catch((err) => {
                             _.forEach(err.response.data, (v, k) => {
                                 Toast.create.negative(`${k}: ${v}`);
