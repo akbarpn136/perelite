@@ -312,6 +312,7 @@
 
                         TambahTugas(payload).then((res) => {
                             Toast.create.positive('Tugas berhasil disimpan.');
+                            this.$router.push({name: this.jenis});
                         }).catch((err) => {
                             _.forEach(err.response.data, (v, k) => {
                                 Toast.create.negative(`${k}: ${v}`);
