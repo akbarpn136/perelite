@@ -91,11 +91,16 @@
         methods: {
             onDateChange() {
                 if (this.datetimeRange.from && this.datetimeRange.to) {
-                    Toast.create.negative(`${this.datetimeRange.from} hingga ${this.datetimeRange.from}`);
+                    let tglAwal = new Date(this.datetimeRange.from).toLocaleDateString('id');
+                    let tglAkhir = new Date(this.datetimeRange.to).toLocaleDateString('id');
+
+                    console.log(tglAwal);
+                    console.log(tglAkhir);
+                    this.onListTugas(tglAwal, tglAkhir);
                 }
             },
-            onListTugas() {
-                LihatTugas(this.kategori).then(res => {
+            onListTugas(tglAwal=null, tglAkhir=null) {
+                LihatTugas(this.kategori, tglAwal, tglAkhir).then(res => {
                     this.daftarTugas = res.data;
                     _.forEach(res.data, v => {
                         this.totalAngka += v['angka'];
