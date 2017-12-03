@@ -15,6 +15,7 @@ class Tugas(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
+        tugasObj = {}
         user = Personil.objects.get(username=self.request.user.username)
         kategori = self.kwargs.get('kategori')
         tglAwal = self.request.GET.get('tglAwal')
@@ -43,9 +44,11 @@ class Tugas(generics.ListCreateAPIView):
             obj = obj.filter(owner=user,
                              butir__startswith=butir)
 
-        tugas = paginations.Pagination(self.request.GET, obj.order_by('-tanggal'))
+        tugas = paginations.Pagination(self.request.GET, obj.order_by('-tanggal')).paginate()
+        tugasObj['count'] = obj.sum('angka')
+        tugasObj['results'] = tugas
 
-        return tugas.paginate()
+        return json.dumps(tugasObj)
 
     def get(self, request, *args, **kwargs):
         return HttpResponse(self.get_queryset())
