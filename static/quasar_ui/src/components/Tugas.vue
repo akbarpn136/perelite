@@ -6,35 +6,24 @@
             </q-card-title>
             <q-card-separator></q-card-separator>
             <q-card-main>
-                <div class="row mb-4 md-gutter">
+                <div class="row mb-4 md-gutter justify-between items-center">
                     <div class="col-md-6">
                         <q-field
-                            helper="Pilih data mulai tanggal"
-                            :error="$v.form.tglAwal.$error"
-                            error-label="Harus diisi">
-                            <q-datetime
+                            icon="filter list"
+                            label="Berdasarkan waktu">
+                            <q-datetime-range
+                                v-model="datetimeRange"
                                 color="secondary"
-                                float-label="Tanggal awal"
-                                v-model="form.tglAwal"
-                                type="date"
+                                class="full-width"
                                 @change="onDateChange"
-                            ></q-datetime>
+                            ></q-datetime-range>
                         </q-field>
                     </div>
 
-                    <div class="col-md-6">
-                        <q-field
-                            helper="Pilih data sampai tanggal"
-                            :error="$v.form.tglAkhir.$error"
-                            error-label="Harus diisi">
-                            <q-datetime
-                                color="secondary"
-                                float-label="Tanggal akhir"
-                                v-model="form.tglAkhir"
-                                type="date"
-                                @change="onDateChange"
-                            ></q-datetime>
-                        </q-field>
+                    <div class="col-md-3 text-right">
+                        <q-chip icon="loyalty" color="secondary">
+                            Total: {{totalAngka.toFixed(2)}}
+                        </q-chip>
                     </div>
                 </div>
 
@@ -49,85 +38,84 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(n,i) in 10" :key="i">
-                        <td data-th="Tanggal" class="text-left">Item #1</td>
-                        <td data-th="Uraian kegiatan" class="text-right">$10.11</td>
-                        <td data-th="Butir" class="text-right">101</td>
-                        <td data-th="Satuan" class="text-right">101</td>
-                        <td data-th="Bukti" class="text-right">101</td>
+                    <tr v-for="tugas in daftarTugas" :key="tugas._id.$oid">
+                        <td data-th="Uraian kegiatan" class="text-left">{{tugas.uraian_singkat}}</td>
+                        <td data-th="Tanggal" class="text-right">{{tugas.tanggal.$date | tgl}}</td>
+                        <td data-th="Butir" class="text-right">{{tugas.butir}}</td>
+                        <td data-th="Satuan" class="text-right">{{tugas.satuan}}</td>
+                        <td data-th="Bukti" class="text-right">
+                            <p v-for="pkt in tugas.paket_tugas">
+                                <a>{{pkt._cls}} {{pkt.nomor}}</a>
+                            </p>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
-
-                <div class="row justify-start">
-                    <div class="col-4">
-                        <q-pagination v-model="page"
-                                      :max="17"
-                                      class="float-left"
-                                      color="secondary"></q-pagination>
-                    </div>
-                </div>
             </q-card-main>
         </q-card>
     </div>
 </template>
 
 <script>
-    import {required} from 'vuelidate/lib/validators';
     import {
-        QBtn,
-        QIcon,
+        QChip,
         QCard,
         QCardTitle,
         QCardMain,
         QCardSeparator,
-        QPagination,
         QField,
-        QInput,
-        QDatetime,
+        QDatetimeRange,
         Toast
     } from 'quasar';
+
+    import {LihatTugas} from '../http/tugas';
+    import * as _ from 'lodash';
 
     export default {
         data() {
             return {
                 page: 1,
-                form: {
-                    tglAwal: '',
-                    tglAkhir: ''
-                }
-            }
-        },
-        validations: {
-            form: {
-                tglAwal: {required},
-                tglAkhir: {required},
+                datetimeRange: {
+                    from: null,
+                    to: null
+                },
+                kategori: null,
+                daftarTugas: [],
+                totalAngka: 0
             }
         },
         created() {
+            this.kategori = this.$route.name;
+            this.onListTugas();
         },
         methods: {
             onDateChange() {
-                if (!this.$v.form.tglAwal.$invalid &&
-                    !this.$v.form.tglAkhir.$invalid) {
-                    console.log('alhamdulillah');
-                } else {
-                    this.$v.form.$touch();
-                    Toast.create.negative('Silahkan periksa kembali.');
+                if (this.datetimeRange.from && this.datetimeRange.to) {
+                    Toast.create.negative(`${this.datetimeRange.from} hingga ${this.datetimeRange.from}`);
                 }
+            },
+            onListTugas() {
+                LihatTugas(this.kategori).then(res => {
+                    this.daftarTugas = res.data;
+                    _.forEach(res.data, v => {
+                        this.totalAngka += v['angka'];
+                    })
+                }).catch(err => {
+                    _.forEach(err.response.data, (v, k) => {
+                        Toast.create.negative(`${k}: ${v}`);
+                    })
+                });
             }
         },
         components: {
-            QBtn,
-            QIcon,
+            QChip,
             QCard,
             QCardTitle,
             QCardMain,
             QCardSeparator,
-            QPagination,
             QField,
-            QInput,
-            QDatetime
+            QDatetimeRange,
+            Toast
         },
         filters: {
             capitalize: function (value) {
@@ -137,6 +125,10 @@
             },
             splitString: function (value) {
                 return value.replace(/([A-Z]+)/g, " $1").replace(/([A-Z][a-z])/g, " $1");
+            },
+            tgl: function(value) {
+                let options = { year: 'numeric', month: 'long', day: 'numeric' };
+                return new Date(value).toLocaleDateString('id', options);
             }
         }
     }
