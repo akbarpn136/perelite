@@ -43,7 +43,7 @@ class Tugas(generics.ListCreateAPIView):
             obj = obj.filter(owner=user,
                              butir__startswith=butir)
 
-        tugas = paginations.Pagination(self.request.GET, obj)
+        tugas = paginations.Pagination(self.request.GET, obj.order_by('-tanggal'))
 
         return tugas.paginate()
 
