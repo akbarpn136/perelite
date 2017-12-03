@@ -31,6 +31,10 @@ class Pagination:
             page_nb = 1
 
         offset = (page_nb - 1) * settings.ITEMS_PER_PAGE
+        count = self.query.count()
+
+        if offset > count:
+            offset = settings.ITEMS_PER_PAGE
 
         try:
             q = self.query.skip(offset).limit(settings.ITEMS_PER_PAGE)
