@@ -8,7 +8,7 @@ const QWERTY = JSON.parse(localStorage.getItem('qwerty')) ||
     JSON.parse({uid: ''});
 const URL_TUGAS = `${URL}core/api1/tugas/`;
 
-function LihatTugas(kategori=null, tglAwal=null, tglAkhir=null) {
+function LihatTugas(kategori=null, tglAwal=null, tglAkhir=null, page=1) {
     return axios.get(`${URL_TUGAS}${kategori}/`, {
         headers: {
             'Authorization': `Bearer ${QWERTY.uid}`
@@ -16,6 +16,7 @@ function LihatTugas(kategori=null, tglAwal=null, tglAkhir=null) {
         params: {
             tglAwal,
             tglAkhir,
+            page,
         }
     });
 }
