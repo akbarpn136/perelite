@@ -1,4 +1,5 @@
 import json
+import datetime
 from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework import exceptions
@@ -16,6 +17,8 @@ class Tugas(generics.ListCreateAPIView):
     def get_queryset(self):
         user = Personil.objects.get(username=self.request.user.username)
         kategori = self.kwargs.get('kategori')
+        tglAwal = self.request.GET.get('tglAwal')
+        tglAkhir = self.request.GET.get('tglAkhir')
 
         if kategori == 'pendidikan':
             butir = 'I.'
@@ -28,7 +31,18 @@ class Tugas(generics.ListCreateAPIView):
         else:
             butir = ''
 
-        obj = models.Tugas.objects.filter(owner=user, butir__startswith=butir)
+        obj = models.Tugas.objects
+
+        if tglAwal and tglAkhir:
+            obj = obj.filter(owner=user,
+                             butir__startswith=butir,
+                             tanggal__gte=datetime.datetime.strptime(tglAwal, '%d/%m/%Y'),
+                             tanggal__lte=datetime.datetime.strptime(tglAkhir, '%d/%m/%Y'))
+
+        else:
+            obj = obj.filter(owner=user,
+                             butir__startswith=butir)
+
         tugas = paginations.Pagination(self.request.GET, obj)
 
         return tugas.paginate()
