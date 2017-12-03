@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework import exceptions
 from . import models
+from perelite_utility.models import Personil
 from .proses import paket
 from perelite_utility import permissions, paginations
 from perelite_utility.helpers import (create_exception,
@@ -13,7 +14,22 @@ class Tugas(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
-        tugas = paginations.Pagination(self.request.GET, models.Tugas.objects)
+        user = Personil.objects.get(username=self.request.user.username)
+        kategori = self.kwargs.get('kategori')
+
+        if kategori == 'pendidikan':
+            butir = 'I.'
+        elif kategori == 'kerekayasaan':
+            butir = 'II.'
+        elif kategori == 'profesi':
+            butir = 'III.'
+        elif kategori == 'penunjang':
+            butir = 'IV.'
+        else:
+            butir = ''
+
+        obj = models.Tugas.objects.filter(owner=user, butir__startswith=butir)
+        tugas = paginations.Pagination(self.request.GET, obj)
 
         return tugas.paginate()
 
@@ -26,7 +42,7 @@ class Tugas(generics.ListCreateAPIView):
 
         tugas = models.Tugas(
             tanggal=request.POST.get('tanggal'),
-            owner=user.username,
+            owner=user,
             kategori=request.POST.get('kategori'),
             butir=request.POST.get('butir'),
             angka=request.POST.get('angka'),
