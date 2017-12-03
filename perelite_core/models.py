@@ -1,4 +1,3 @@
-import uuid
 from mongoengine import *
 from perelite_utility.models import Personil
 
@@ -12,7 +11,7 @@ OPSI_PELAKSANA = (
 
 class Lk(EmbeddedDocument):
     nama = StringField(default='LEMBAR KERJA')
-    kode_tugas = StringField(default=uuid.uuid4().hex)
+    kode_tugas = StringField(required=True)
     kode_peran = StringField(required=True)
     nomor = StringField(required=True)
     referensi = StringField(required=True)

@@ -1,3 +1,4 @@
+import uuid
 import json
 from . import models
 
@@ -18,6 +19,7 @@ def paket(package):
                 uraian_lengkap=p['uraian_lengkap'],
                 nama_pemberi=p['nama_pemberi'],
                 peran_pemberi=p['peran_pemberi'],
+                kode_tugas=uuid.uuid4().hex,
             )
 
             paket_tugas.append(lk)
