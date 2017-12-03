@@ -94,17 +94,14 @@
                     let tglAwal = new Date(this.datetimeRange.from).toLocaleDateString('id');
                     let tglAkhir = new Date(this.datetimeRange.to).toLocaleDateString('id');
 
-                    console.log(tglAwal);
-                    console.log(tglAkhir);
                     this.onListTugas(tglAwal, tglAkhir);
                 }
             },
             onListTugas(tglAwal=null, tglAkhir=null) {
                 LihatTugas(this.kategori, tglAwal, tglAkhir).then(res => {
-                    this.daftarTugas = res.data;
-                    _.forEach(res.data, v => {
-                        this.totalAngka += v['angka'];
-                    })
+                    let results = JSON.parse(res.data.results);
+                    this.totalAngka = JSON.parse(res.data.count);
+                    this.daftarTugas = results;
                 }).catch(err => {
                     _.forEach(err.response.data, (v, k) => {
                         Toast.create.negative(`${k}: ${v}`);
