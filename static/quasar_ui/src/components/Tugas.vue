@@ -22,7 +22,7 @@
 
                     <div class="col-md-3 text-right">
                         <q-chip icon="loyalty" color="secondary">
-                            Total: {{totalAngka.toFixed(2)}}
+                            Total: {{totalAngka}}
                         </q-chip>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                         <td data-th="Satuan" class="text-right">{{tugas.satuan}}</td>
                         <td data-th="Bukti" class="text-right">
                             <p v-for="pkt in tugas.paket_tugas">
-                                <a>{{pkt._cls}} {{pkt.nomor}}</a>
+                                <a @click.prevent="onPaketTugasClick(pkt.kode_tugas)">{{pkt._cls}} {{pkt.nomor}}</a>
                             </p>
                         </td>
                     </tr>
@@ -107,6 +107,9 @@
                         Toast.create.negative(`${k}: ${v}`);
                     })
                 });
+            },
+            onPaketTugasClick(kode_tugas) {
+                console.log(kode_tugas);
             }
         },
         components: {
