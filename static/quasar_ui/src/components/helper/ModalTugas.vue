@@ -114,7 +114,7 @@
         <div class="row mt-3 mb-4">
             <div class="col">
                 <q-btn color="primary"
-                       @click="onFormTugasSubmit"
+                       @click="onFormTugasSubmit()"
                        icon="save">
                     Simpan
                 </q-btn>
@@ -302,7 +302,7 @@
                         });
 
                         let payload = new FormData();
-                        payload.append('tanggal', obj.tanggal.toLocaleDateString());
+                        payload.append('tanggal', new Date(obj.tanggal).toLocaleDateString());
                         payload.append('kategori', obj.jenis);
                         payload.append('butir', obj.butir);
                         payload.append('angka', obj.angka);
@@ -313,6 +313,7 @@
                         TambahTugas(payload).then((res) => {
                             Toast.create.positive('Tugas berhasil disimpan.');
                             this.$router.push({name: this.jenis});
+                            this.clearForm();
                         }).catch((err) => {
                             _.forEach(err.response.data, (v, k) => {
                                 Toast.create.negative(`${k}: ${v}`);
