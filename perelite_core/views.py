@@ -44,8 +44,9 @@ class Tugas(generics.ListCreateAPIView):
             obj = obj.filter(owner=user,
                              butir__startswith=butir)
 
+        tugasObj['total_tugas'] = obj.count()
         tugas = paginations.Pagination(self.request.GET, obj.order_by('-tanggal')).paginate()
-        tugasObj['count'] = round(obj.sum('angka'), 3)
+        tugasObj['total_angka'] = round(obj.sum('angka'), 3)
         tugasObj['results'] = tugas
 
         return json.dumps(tugasObj)
