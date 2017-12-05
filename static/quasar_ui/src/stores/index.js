@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex';
 import * as _ from 'lodash';
 import {lk, getLkByName} from './tugas/lk';
-import {tugas, getTugasByName} from './tugas/tugas';
+import {tugas, tugasRinci, getTugasByName} from './tugas/tugas';
 
 Vue.use(Vuex);
 
@@ -16,6 +16,7 @@ export default new Vuex.Store({
             OthersActive: false
         },
         tugas,
+        tugasRinci,
         lk
     },
     getters: {
@@ -24,6 +25,9 @@ export default new Vuex.Store({
         },
         getTaskPackages(state) {
             return state.tugas.taskPackages;
+        },
+        getTugasRinci(state) {
+            return state.tugasRinci;
         },
         getTugasByName,
         getLkByName
@@ -43,11 +47,14 @@ export default new Vuex.Store({
             state.tugas.taskPackages = [];
         },
         setActiveTaskTab(state, payload) {
-            state.ActiveTaskTab.TabName = payload.TabName;
-            state.ActiveTaskTab.LkActive = payload.LkActive;
-            state.ActiveTaskTab.LbActive = payload.LbActive;
-            state.ActiveTaskTab.TnActive = payload.TnActive;
-            state.ActiveTaskTab.OthersActive = payload.OthersActive;
+            _.forEach(state.ActiveTaskTab, (v, k) => {
+                state.ActiveTaskTab[k] = payload[k];
+            });
+        },
+        setTugasRinci(state, payload) {
+            _.forEach(payload, (v, k) => {
+                state.tugasRinci[k] = payload[k];
+            });
         },
         setTugas(state, payload) {
             state.tugas[payload.nama] = payload.value;
