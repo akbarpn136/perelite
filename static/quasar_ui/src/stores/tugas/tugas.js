@@ -8,6 +8,8 @@ const tugas = {
     taskPackages: []
 };
 
+const tugasRinci = {};
+
 const getTugasByName = (state) => (name) => {
     if (name) {
         return state.tugas[name];
@@ -16,4 +18,4 @@ const getTugasByName = (state) => (name) => {
     }
 };
 
-export {tugas, getTugasByName};
+export {tugas, tugasRinci, getTugasByName};
