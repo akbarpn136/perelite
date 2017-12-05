@@ -27,30 +27,41 @@
                     </div>
                 </div>
 
-                <table class="q-table bordered bg-white loose full-width horizontal-separator striped responsive">
-                    <thead>
-                    <tr>
-                        <th class="text-left">Uraian kegiatan</th>
-                        <th class="text-right">Tanggal</th>
-                        <th class="text-right">Butir</th>
-                        <th class="text-right">Satuan</th>
-                        <th class="text-right">Bukti</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="tugas in daftarTugas" :key="tugas._id.$oid">
-                        <td data-th="Uraian kegiatan" class="text-left">{{tugas.uraian_singkat}}</td>
-                        <td data-th="Tanggal" class="text-right">{{tugas.tanggal.$date | tgl}}</td>
-                        <td data-th="Butir" class="text-right">{{tugas.butir}}</td>
-                        <td data-th="Satuan" class="text-right">{{tugas.satuan}}</td>
-                        <td data-th="Bukti" class="text-right">
-                            <p v-for="pkt in tugas.paket_tugas">
-                                <a @click.prevent="onPaketTugasClick(pkt.kode_tugas)">{{pkt._cls}} {{pkt.nomor}}</a>
-                            </p>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                <q-infinite-scroll :handler="refresher"
+                                   ref="infiniteScroll">
+                    <table class="q-table bordered bg-white loose full-width horizontal-separator striped responsive">
+                        <thead>
+                        <tr>
+                            <th class="text-left">Uraian kegiatan</th>
+                            <th class="text-right">Tanggal</th>
+                            <th class="text-right">Butir</th>
+                            <th class="text-right">Satuan</th>
+                            <th class="text-right">Bukti</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="(tugas, idx) in daftarTugas" :key="tugas._id.$oid">
+                            <td data-th="Uraian kegiatan" class="text-left">#{{idx+1}} {{tugas.uraian_singkat}}</td>
+                            <td data-th="Tanggal" class="text-right">{{tugas.tanggal.$date | tgl}}</td>
+                            <td data-th="Butir" class="text-right">{{tugas.butir}}</td>
+                            <td data-th="Satuan" class="text-right">{{tugas.satuan}}</td>
+                            <td data-th="Bukti" class="text-right">
+                                <p v-for="pkt in tugas.paket_tugas">
+                                    <a @click.prevent="onPaketTugasClick(pkt.kode_tugas)">{{pkt._cls}} {{pkt.nomor}}</a>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr v-if="noData">
+                            <td colspan="5" class="text-center">
+                                <q-chip color="info" square>Tidak ada data</q-chip>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div slot="message" class="row justify-center">
+                        <q-spinner-dots :size="35"></q-spinner-dots>
+                    </div>
+                </q-infinite-scroll>
             </q-card-main>
         </q-card>
     </div>
@@ -58,6 +69,7 @@
 
 <script>
     import {
+        debounce,
         QChip,
         QCard,
         QCardTitle,
@@ -65,13 +77,27 @@
         QCardSeparator,
         QField,
         QDatetimeRange,
-        Toast
+        Toast,
+        QInfiniteScroll,
+        QSpinnerDots
     } from 'quasar';
 
     import {LihatTugas} from '../http/tugas';
     import * as _ from 'lodash';
 
     export default {
+        components: {
+            QChip,
+            QCard,
+            QCardTitle,
+            QCardMain,
+            QCardSeparator,
+            QField,
+            QDatetimeRange,
+            Toast,
+            QInfiniteScroll,
+            QSpinnerDots
+        },
         data() {
             return {
                 page: 1,
@@ -81,46 +107,53 @@
                 },
                 kategori: null,
                 daftarTugas: [],
-                totalAngka: 0
+                totalAngka: 0,
+                totalTugas: 0,
+                tglAwal: null,
+                tglAkhir: null,
+                noData: false,
             }
         },
         created() {
             this.kategori = this.$route.name;
-            this.onListTugas();
         },
         methods: {
             onDateChange() {
                 if (this.datetimeRange.from && this.datetimeRange.to) {
-                    let tglAwal = new Date(this.datetimeRange.from).toLocaleDateString('id');
-                    let tglAkhir = new Date(this.datetimeRange.to).toLocaleDateString('id');
+                    this.tglAwal = new Date(this.datetimeRange.from).toLocaleDateString('id');
+                    this.tglAkhir = new Date(this.datetimeRange.to).toLocaleDateString('id');
 
-                    this.onListTugas(tglAwal, tglAkhir);
+                    this.daftarTugas = [];
+                    this.$refs.infiniteScroll.reset();
+                    this.$refs.infiniteScroll.resume();
                 }
-            },
-            onListTugas(tglAwal=null, tglAkhir=null) {
-                LihatTugas(this.kategori, tglAwal, tglAkhir).then(res => {
-                    let results = JSON.parse(res.data.results);
-                    this.totalAngka = JSON.parse(res.data.count);
-                    this.daftarTugas = results;
-                }).catch(err => {
-                    _.forEach(err.response.data, (v, k) => {
-                        Toast.create.negative(`${k}: ${v}`);
-                    })
-                });
             },
             onPaketTugasClick(kode_tugas) {
                 console.log(kode_tugas);
+            },
+            refresher(index, done) {
+                setTimeout(() => {
+                    LihatTugas(this.kategori, this.tglAwal, this.tglAkhir, index).then(res => {
+                        let results = JSON.parse(res.data.results);
+                        this.totalAngka = JSON.parse(res.data['total_angka']);
+                        this.totalTugas = JSON.parse(res.data['total_tugas']);
+                        this.daftarTugas = this.daftarTugas.concat(results);
+                        console.log(this.daftarTugas.length);
+
+                        this.noData = (this.totalTugas === 0) ? true : false;
+
+                        if (this.daftarTugas.length >= this.totalTugas) {
+                            this.$refs.infiniteScroll.stop();
+                        }
+                        done();
+                    }).catch(err => {
+                        _.forEach(err.response.data, (v, k) => {
+                            Toast.create.negative(`${k}: ${v}`);
+                        });
+                        done();
+                    });
+                }, 1000);
             }
-        },
-        components: {
-            QChip,
-            QCard,
-            QCardTitle,
-            QCardMain,
-            QCardSeparator,
-            QField,
-            QDatetimeRange,
-            Toast
         },
         filters: {
             capitalize: function (value) {
@@ -131,8 +164,8 @@
             splitString: function (value) {
                 return value.replace(/([A-Z]+)/g, " $1").replace(/([A-Z][a-z])/g, " $1");
             },
-            tgl: function(value) {
-                let options = { year: 'numeric', month: 'long', day: 'numeric' };
+            tgl: function (value) {
+                let options = {year: 'numeric', month: 'long', day: 'numeric'};
                 return new Date(value).toLocaleDateString('id', options);
             }
         }
