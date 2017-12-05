@@ -49,7 +49,7 @@
                             <td data-th="Satuan" class="text-right">{{tugas.satuan}}</td>
                             <td data-th="Bukti" class="text-right">
                                 <p v-for="pkt in tugas.paket_tugas">
-                                    <a @click.prevent="onPaketTugasClick(pkt.kode_tugas)">{{pkt._cls}} {{pkt.nomor}}</a>
+                                    <a @click.prevent="onPaketTugasClick(pkt, {tanggal: tugas.tanggal.$date, butir: tugas.butir})">{{pkt._cls}} {{pkt.nomor}}</a>
                                 </p>
                             </td>
                         </tr>
@@ -66,12 +66,16 @@
                 </q-infinite-scroll>
             </q-card-main>
         </q-card>
+
+        <q-modal v-model="isTugasRinci" maximized>
+            <app-tugas-rinci v-if="isTugasRinci"></app-tugas-rinci>
+        </q-modal>
     </div>
 </template>
 
 <script>
     import {
-        debounce,
+        QModal,
         QChip,
         QCard,
         QCardTitle,
@@ -86,9 +90,11 @@
 
     import {LihatTugas} from '../http/tugas';
     import * as _ from 'lodash';
+    import appTugasRinci from './helper/tugas/TugasRinci';
 
     export default {
         components: {
+            QModal,
             QChip,
             QCard,
             QCardTitle,
@@ -98,7 +104,8 @@
             QDatetimeRange,
             Toast,
             QInfiniteScroll,
-            QSpinnerDots
+            QSpinnerDots,
+            appTugasRinci,
         },
         data() {
             return {
@@ -114,6 +121,7 @@
                 tglAwal: null,
                 tglAkhir: null,
                 noData: false,
+                isTugasRinci: false
             }
         },
         created() {
@@ -130,8 +138,11 @@
                     this.$refs.infiniteScroll.resume();
                 }
             },
-            onPaketTugasClick(kode_tugas) {
-                console.log(kode_tugas);
+            onPaketTugasClick(paketTugas, addon) {
+                paketTugas['tanggal'] = addon.tanggal;
+                paketTugas['butir'] = addon.butir;
+                this.$store.commit('setTugasRinci', paketTugas);
+                this.isTugasRinci = !this.isTugasRinci;
             },
             refresher(index, done) {
                 setTimeout(() => {
@@ -157,14 +168,6 @@
             }
         },
         filters: {
-            capitalize: function (value) {
-                if (!value) return '';
-                value = value.toString();
-                return value.charAt(0).toUpperCase() + value.slice(1);
-            },
-            splitString: function (value) {
-                return value.replace(/([A-Z]+)/g, " $1").replace(/([A-Z][a-z])/g, " $1");
-            },
             tgl: function (value) {
                 let options = {year: 'numeric', month: 'long', day: 'numeric'};
                 return new Date(value).toLocaleDateString('id', options);
