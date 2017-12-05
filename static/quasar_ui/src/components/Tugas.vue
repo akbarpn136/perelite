@@ -138,7 +138,6 @@
                         this.totalAngka = JSON.parse(res.data['total_angka']);
                         this.totalTugas = JSON.parse(res.data['total_tugas']);
                         this.daftarTugas = this.daftarTugas.concat(results);
-                        console.log(this.daftarTugas.length);
 
                         this.noData = (this.totalTugas === 0) ? true : false;
 
