@@ -28,6 +28,16 @@ import 'quasar-extras/material-icons'
 // import 'quasar-extras/fontawesome'
 // import 'quasar-extras/animate'
 
+Vue.filter('capitalize', function (value) {
+  if (!value) return '';
+  value = value.toString();
+  return value.charAt(0).toUpperCase() + value.slice(1)
+});
+
+Vue.filter('splitString', function (value) {
+  return value.replace(/([A-Z]+)/g, " $1").replace(/([A-Z][a-z])/g, " $1");
+});
+
 Quasar.start(() => {
     /* eslint-disable no-new */
     new Vue({
