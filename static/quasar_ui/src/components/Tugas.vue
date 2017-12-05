@@ -32,6 +32,7 @@
                     <table class="q-table bordered bg-white loose full-width horizontal-separator striped responsive">
                         <thead>
                         <tr>
+                            <th class="text-right">#</th>
                             <th class="text-left">Uraian kegiatan</th>
                             <th class="text-right">Tanggal</th>
                             <th class="text-right">Butir</th>
@@ -41,7 +42,8 @@
                         </thead>
                         <tbody>
                         <tr v-for="(tugas, idx) in daftarTugas" :key="tugas._id.$oid">
-                            <td data-th="Uraian kegiatan" class="text-left">#{{idx+1}} {{tugas.uraian_singkat}}</td>
+                            <td data-th="#" class="text-right">{{idx+1}}</td>
+                            <td data-th="Uraian kegiatan" class="text-left">{{tugas.uraian_singkat}}</td>
                             <td data-th="Tanggal" class="text-right">{{tugas.tanggal.$date | tgl}}</td>
                             <td data-th="Butir" class="text-right">{{tugas.butir}}</td>
                             <td data-th="Satuan" class="text-right">{{tugas.satuan}}</td>
@@ -52,7 +54,7 @@
                             </td>
                         </tr>
                         <tr v-if="noData">
-                            <td colspan="5" class="text-center">
+                            <td colspan="6" class="text-center">
                                 <q-chip color="info" square>Tidak ada data</q-chip>
                             </td>
                         </tr>
