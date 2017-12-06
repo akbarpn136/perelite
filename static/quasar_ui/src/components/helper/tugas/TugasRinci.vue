@@ -1,6 +1,26 @@
 <template>
     <div class="layout-padding">
-        <div v-if="this.tugas._cls === 'Lk'">
+        <div class="row justify-between mb-4">
+            <div class="col-md-6">
+                <q-btn color="primary" class="print-hide" small outline @click="onCetak()">
+                    <q-icon name="print"></q-icon>
+                </q-btn>
+                <q-btn color="green" class="print-hide" small outline @click="onCetak()">
+                    <q-icon name="edit"></q-icon>
+                </q-btn>
+                <q-btn color="negative" class="print-hide" small outline @click="onDeleteTugas()">
+                    <q-icon name="delete"></q-icon>
+                </q-btn>
+            </div>
+            <div class="col-md-6 text-right">
+                <q-btn color="gray" flat
+                       class="print-hide"
+                       @click="$router.go(-1)">
+                    <q-icon name="clear"></q-icon>
+                </q-btn>
+            </div>
+        </div>
+        <div id="Lk" v-if="this.tugas._cls === 'Lk'" ref="Lk">
             <table class="q-table cell-separator compact full-width">
                 <tbody>
                 <tr>
@@ -88,12 +108,16 @@
 <script>
     import {
         QBtn,
+        QIcon,
     } from 'quasar';
+
+    import printJS from 'print-js/src';
 
     export default {
         name: "tugas-rinci",
         components: {
             QBtn,
+            QIcon,
         },
         created() {
             this.tugas = this.$store.getters.getTugasRinci;
@@ -103,6 +127,15 @@
             return {
                 tugas: null,
                 user: null
+            }
+        },
+        methods: {
+            onCetak() {
+                printJS(this.$refs.Lk.id, 'html');
+            },
+            onDeleteTugas() {
+                let selected_tugas = this.$store.getters.getTugasRinci;
+                console.log(selected_tugas.kode_tugas)
             }
         },
         filters: {
