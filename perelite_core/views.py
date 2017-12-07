@@ -70,3 +70,27 @@ class Tugas(generics.ListCreateAPIView):
         )
 
         return create_exception(tugas)
+
+
+class TugasModifikasi(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsOwnerTugas,)
+    tugas = ''
+
+    def dispatch(self, request, *args, **kwargs):
+        self.tugas = self.get_object()
+        return super(TugasModifikasi, self).dispatch(request, *args, **kwargs)
+
+    def get_object(self):
+        try:
+            tgs = models.Tugas.objects.get(pk=self.kwargs.get('tugas_id'))
+        except models.Tugas.DoesNotExist:
+            raise exceptions.NotFound()
+
+        except models.Tugas.MultipleObjectsReturned:
+            raise exceptions.NotAcceptable()
+
+        return tgs
+
+    def get(self, request, *args, **kwargs):
+        return check_instance(self.get_object(),
+                              models.Tugas)
