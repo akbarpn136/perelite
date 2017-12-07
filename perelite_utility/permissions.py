@@ -1,6 +1,7 @@
 from rest_framework import exceptions
 from rest_framework import permissions
 from . import models
+from perelite_core import models
 
 
 def _user(username):
@@ -22,6 +23,17 @@ class IsAuthenticated(permissions.BasePermission):
             return _user(request.user.username).is_authenticated()
 
         except models.Personil.DoesNotExist:
+            raise exceptions.PermissionDenied()
+
+
+class IsOwnerTugas(permissions.BasePermission):
+    def has_permission(self, request, view):
+        tugas = getattr(view, 'tugas')
+
+        try:
+            return tugas.owner.username == request.user.username
+
+        except models.Tugas.DoesNotExist:
             raise exceptions.PermissionDenied()
 
 
