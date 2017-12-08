@@ -49,7 +49,8 @@
                             <td data-th="Satuan" class="text-right">{{tugas.satuan}}</td>
                             <td data-th="Bukti" class="text-right">
                                 <p v-for="pkt in tugas.paket_tugas">
-                                    <a @click.prevent="onPaketTugasClick(pkt, {tanggal: tugas.tanggal.$date, butir: tugas.butir})">{{pkt._cls}} {{pkt.nomor}}</a>
+                                    <a @click.prevent="onPaketTugasClick(pkt, {tanggal: tugas.tanggal.$date, butir: tugas.butir, pk: tugas._id.$oid})">{{pkt._cls}}
+                                        {{pkt.nomor}}</a>
                                 </p>
                             </td>
                         </tr>
@@ -68,7 +69,8 @@
         </q-card>
 
         <q-modal v-model="isTugasRinci" maximized>
-            <app-tugas-rinci v-if="isTugasRinci"></app-tugas-rinci>
+            <app-tugas-rinci v-if="isTugasRinci"
+                             @trigger="onListenChild"></app-tugas-rinci>
         </q-modal>
     </div>
 </template>
@@ -121,26 +123,30 @@
                 tglAwal: null,
                 tglAkhir: null,
                 noData: false,
-                isTugasRinci: false
+                isTugasRinci: false,
             }
         },
         created() {
             this.kategori = this.$route.name;
         },
         methods: {
+            onResetDaftarTugas() {
+                this.daftarTugas = [];
+                this.$refs.infiniteScroll.reset();
+                this.$refs.infiniteScroll.resume();
+            },
             onDateChange() {
                 if (this.datetimeRange.from && this.datetimeRange.to) {
                     this.tglAwal = new Date(this.datetimeRange.from).toLocaleDateString('id');
                     this.tglAkhir = new Date(this.datetimeRange.to).toLocaleDateString('id');
 
-                    this.daftarTugas = [];
-                    this.$refs.infiniteScroll.reset();
-                    this.$refs.infiniteScroll.resume();
+                    this.onResetDaftarTugas();
                 }
             },
             onPaketTugasClick(paketTugas, addon) {
                 paketTugas['tanggal'] = addon.tanggal;
                 paketTugas['butir'] = addon.butir;
+                paketTugas['pk'] = addon.pk;
                 this.$store.commit('setTugasRinci', paketTugas);
                 this.isTugasRinci = !this.isTugasRinci;
             },
@@ -165,6 +171,9 @@
                         done();
                     });
                 }, 1000);
+            },
+            onListenChild(val) {
+                this.onResetDaftarTugas();
             }
         },
         filters: {
