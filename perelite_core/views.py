@@ -94,3 +94,11 @@ class TugasModifikasi(generics.RetrieveUpdateDestroyAPIView):
     def get(self, request, *args, **kwargs):
         return check_instance(self.get_object(),
                               models.Tugas)
+
+    def destroy(self, request, *args, **kwargs):
+        def execute():
+            return self.get_object().delete()
+
+        return check_instance(self.get_object(),
+                              models.Tugas,
+                              execute())
