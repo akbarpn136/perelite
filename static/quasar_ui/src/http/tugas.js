@@ -29,4 +29,12 @@ function TambahTugas(payload) {
     });
 }
 
-export {LihatTugas, TambahTugas};
+function HapusTugas(id) {
+    return axios.delete(`${URL_TUGAS}${id}/rincian/`, {
+        headers: {
+            'Authorization': `Bearer ${QWERTY.uid}`
+        }
+    });
+}
+
+export {LihatTugas, TambahTugas, HapusTugas};
