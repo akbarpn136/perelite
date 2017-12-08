@@ -107,11 +107,15 @@
 
 <script>
     import {
+        Dialog,
+        Toast,
         QBtn,
         QIcon,
     } from 'quasar';
 
     import printJS from 'print-js/src';
+    import {HapusTugas} from '../../../http/tugas';
+    import * as _ from 'lodash';
 
     export default {
         name: "tugas-rinci",
@@ -119,6 +123,7 @@
             QBtn,
             QIcon,
         },
+        props: ['trigger'],
         created() {
             this.tugas = this.$store.getters.getTugasRinci;
             this.user = JSON.parse(localStorage.getItem('qwerty')).user;
@@ -135,7 +140,33 @@
             },
             onDeleteTugas() {
                 let selected_tugas = this.$store.getters.getTugasRinci;
-                console.log(selected_tugas.kode_tugas)
+                Dialog.create({
+                    title: 'Anda yakin?',
+                    message: 'Tugas yang dihapus tidak dapat dikembalikan lagi.',
+                    buttons: [
+                        {
+                            label: 'Batal',
+                            handler() {
+                                Toast.create('Disagreed...')
+                            }
+                        },
+                        {
+                            label: 'Hapus',
+                            color: 'negative',
+                            handler: () => {
+                                HapusTugas(selected_tugas.pk).then(() => {
+                                    Toast.create.positive('Tugas berhasil dihapus');
+                                    this.$emit('trigger', true);
+                                    this.$router.go(-1);
+                                }).catch((err) => {
+                                    _.forEach(err.response.data, (v, k) => {
+                                        Toast.create.negative(`${k}: ${v}`);
+                                    });
+                                });
+                            }
+                        }
+                    ]
+                });
             }
         },
         filters: {
