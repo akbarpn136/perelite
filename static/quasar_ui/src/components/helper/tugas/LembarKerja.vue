@@ -274,7 +274,9 @@
                 this.$store.commit('setLk', {nama:'validasi', value: null});
                 this.$store.commit('setLk', {nama:'validasi', value: this.$v});
 
-                if (info !== 'uraian_lengkap' && !this.$v[info].$error) {
+                if (info !== 'uraian_lengkap') {
+                    if (!this.$v[info].$error) this.$store.commit('setTaskPackages', {key, payload});
+                } else {
                     this.$store.commit('setTaskPackages', {key, payload});
                 }
             }
