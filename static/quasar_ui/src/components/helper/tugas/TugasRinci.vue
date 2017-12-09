@@ -71,7 +71,7 @@
                 </tbody>
             </table>
             <div v-html="tugas.uraian_lengkap" class="mt-4"></div>
-            <table class="q-table cell-separator compact full-width" style="margin-bottom: 0">
+            <table class="q-table cell-separator bordered compact full-width" style="margin-bottom: 0">
                 <tbody>
                 <tr>
                     <td class="text-left" colspan="2">
@@ -113,7 +113,7 @@
         QIcon,
     } from 'quasar';
 
-    import printJS from 'print-js/src';
+    import html2pdf from 'html2pdf.js/src';
     import {HapusTugas} from '../../../http/tugas';
     import * as _ from 'lodash';
 
@@ -136,7 +136,14 @@
         },
         methods: {
             onCetak() {
-                printJS(this.$refs.Lk.id, 'html');
+                html2pdf(this.$refs.Lk, {
+                    margin: 1,
+                    enableLinks: true,
+                    filename: `${this.$refs.Lk.id}.pdf`,
+                    image: {type: 'jpeg', quality: 0.98},
+                    html2canvas: {dpi: 192, letterRendering: true},
+                    jsPDF: {unit: 'cm', format: 'a4', orientation: 'portrait'}
+                });
             },
             onDeleteTugas() {
                 let selected_tugas = this.$store.getters.getTugasRinci;
