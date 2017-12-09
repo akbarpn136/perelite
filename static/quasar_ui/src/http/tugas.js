@@ -21,6 +21,14 @@ function LihatTugas(kategori=null, tglAwal=null, tglAkhir=null, page=1) {
     });
 }
 
+function LihatTugasTertentu(pk) {
+    return axios.get(`${URL_TUGAS}${pk}/rincian/`, {
+        headers: {
+            'Authorization': `Bearer ${QWERTY.uid}`
+        }
+    });
+}
+
 function TambahTugas(payload) {
     return axios.post(URL_TUGAS, payload, {
         headers: {
@@ -37,4 +45,9 @@ function HapusTugas(id) {
     });
 }
 
-export {LihatTugas, TambahTugas, HapusTugas};
+export {
+    LihatTugas,
+    LihatTugasTertentu,
+    TambahTugas,
+    HapusTugas
+};
