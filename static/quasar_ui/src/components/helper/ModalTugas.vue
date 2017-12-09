@@ -142,7 +142,7 @@
 
     import appTabsTugas from './TabsTugas.vue';
     import {GetButir} from '../../http/butir';
-    import {TambahTugas} from '../../http/tugas';
+    import {TambahTugas, LihatTugasTertentu} from '../../http/tugas';
 
     export default {
         data() {
@@ -182,6 +182,21 @@
             QDatetime,
             QSelect,
             appTabsTugas
+        },
+        created() {
+            let pk = this.$route.params['pk'];
+            console.log(pk);
+            if (pk) {
+                LihatTugasTertentu(pk).then(res => {
+                    this.tanggal = res.data.tanggal.$data;
+                    this.jenis = res.data.jenis;
+                    this.butir = res.data.butir;
+                    this.satuan = res.data.satuan;
+                    this.checkActiveTabs(this.satuan);
+                }).catch(err => {
+                    console.log(err);
+                });
+            }
         },
         methods: {
             onBatalClick() {
