@@ -102,9 +102,10 @@
                     :error="false"
                     error-label="Harus diisi">
                     <quill-editor v-model="uraian_lengkap"
+                                  :options="editorOption"
                                   @blur="addToTaskPackage('uraian_lengkap')"
-                                  style="height: 650px; margin-bottom: 68px;"
-                                  ref="lk">
+                                  @ready="onEditorReady($event)"
+                                  style="height: 650px; margin-bottom: 68px;">
                     </quill-editor>
                 </q-field>
             </div>
@@ -172,7 +173,7 @@
 
     export default {
         created() {
-            this.$store.commit('setLk', {nama:'validasi', value: this.$v});
+            this.$store.commit('setLk', {nama: 'validasi', value: this.$v});
         },
         components: {
             quillEditor,
@@ -180,6 +181,36 @@
             QInput,
             QList,
             QCollapsible
+        },
+        data() {
+            return {
+                editorOption: {
+                    debug: 'error',
+                    modules: {
+                        toolbar: [
+                            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                            ['blockquote', 'code-block'],
+
+                            [{'header': 1}, {'header': 2}],               // custom button values
+                            [{'list': 'ordered'}, {'list': 'bullet'}],
+                            [{'script': 'sub'}, {'script': 'super'}],      // superscript/subscript
+                            [{'indent': '-1'}, {'indent': '+1'}],          // outdent/indent
+                            [{'direction': 'rtl'}],                         // text direction
+
+                            [{'size': ['small', false, 'large', 'huge']}],  // custom dropdown
+                            [{'header': [1, 2, 3, 4, 5, 6, false]}],
+
+                            [{'color': []}, {'background': []}],          // dropdown with defaults from theme
+                            [{'font': []}],
+                            [{'align': []}],
+
+                            ['clean'], // remove formatting button
+                            ['link', 'image', 'video', 'formula'],
+                            ['omega']
+                        ]
+                    }
+                }
+            }
         },
         validations: {
             kode_peran: {required},
@@ -257,6 +288,20 @@
             },
         },
         methods: {
+            onEditorReady(quill) {
+                let toolbar = quill.getModule('toolbar');
+                toolbar.addHandler('omega', function() {
+                    console.log('omega')
+                });
+
+                let customButton = document.querySelector('.ql-omega');
+                customButton.addEventListener('click', function() {
+                  var range = quill.getSelection();
+                  if (range) {
+                    quill.insertText(range.index, `Kepada Yth`);
+                  }
+                });
+            },
             addToTaskPackage(info) {
                 let key = {nama: 'LEMBAR KERJA'};
                 let payload = {
@@ -271,8 +316,8 @@
                     peran_pemberi: this.peran_pemberi,
                 };
 
-                this.$store.commit('setLk', {nama:'validasi', value: null});
-                this.$store.commit('setLk', {nama:'validasi', value: this.$v});
+                this.$store.commit('setLk', {nama: 'validasi', value: null});
+                this.$store.commit('setLk', {nama: 'validasi', value: this.$v});
 
                 if (info !== 'uraian_lengkap') {
                     if (!this.$v[info].$error) this.$store.commit('setTaskPackages', {key, payload});
@@ -284,5 +329,7 @@
     }
 </script>
 
-<style>
+<style lang="sass">
+    button.ql-omega:after
+        content: '...'
 </style>
