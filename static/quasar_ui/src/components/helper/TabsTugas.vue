@@ -1,8 +1,8 @@
 <template>
     <q-tabs v-model="setActiveTask.TabName" color="deep-orange-5" align="justify">
-        <q-tab name="lk" slot="title" :disable="!setActiveTask.LkActive" icon="note" label="Lembar Kerja"></q-tab>
-        <q-tab name="lb" slot="title" :disable="!setActiveTask.LbActive" icon="history" label="Logbook"></q-tab>
-        <q-tab name="tn" slot="title" :disable="!setActiveTask.TnActive" icon="movie" label="Technical Note"></q-tab>
+        <q-tab name="lk" slot="title" v-if="setActiveTask.LkActive" icon="note" label="Lembar Kerja"></q-tab>
+        <q-tab name="lb" slot="title" v-if="setActiveTask.LbActive" icon="history" label="Logbook"></q-tab>
+        <q-tab name="tn" slot="title" v-if="setActiveTask.TnActive" icon="movie" label="Technical Note"></q-tab>
         <q-tab name="ot" slot="title" :disable="!setActiveTask.OthersActive" icon="explore" label="Lainnya"></q-tab>
 
         <q-tab-pane name="lk">
