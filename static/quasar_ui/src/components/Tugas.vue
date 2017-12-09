@@ -49,8 +49,8 @@
                             <td data-th="Satuan" class="text-right">{{tugas.satuan}}</td>
                             <td data-th="Bukti" class="text-right">
                                 <p v-for="pkt in tugas.paket_tugas">
-                                    <a @click.prevent="onPaketTugasClick(pkt, {tanggal: tugas.tanggal.$date, butir: tugas.butir, pk: tugas._id.$oid})">{{pkt._cls}}
-                                        {{pkt.nomor}}</a>
+                                    <a @click.prevent="onPaketTugasClick(pkt, tugas)">
+                                        {{pkt._cls}} {{pkt.nomor}}</a>
                                 </p>
                             </td>
                         </tr>
@@ -67,17 +67,11 @@
                 </q-infinite-scroll>
             </q-card-main>
         </q-card>
-
-        <q-modal v-model="isTugasRinci" maximized>
-            <app-tugas-rinci v-if="isTugasRinci"
-                             @trigger="onListenChild"></app-tugas-rinci>
-        </q-modal>
     </div>
 </template>
 
 <script>
     import {
-        QModal,
         QChip,
         QCard,
         QCardTitle,
@@ -92,11 +86,9 @@
 
     import {LihatTugas} from '../http/tugas';
     import * as _ from 'lodash';
-    import appTugasRinci from './helper/tugas/TugasRinci';
 
     export default {
         components: {
-            QModal,
             QChip,
             QCard,
             QCardTitle,
@@ -107,7 +99,6 @@
             Toast,
             QInfiniteScroll,
             QSpinnerDots,
-            appTugasRinci,
         },
         data() {
             return {
@@ -146,9 +137,9 @@
             onPaketTugasClick(paketTugas, addon) {
                 paketTugas['tanggal'] = addon.tanggal;
                 paketTugas['butir'] = addon.butir;
-                paketTugas['pk'] = addon.pk;
+                paketTugas['pk'] = addon._id.$oid;
                 this.$store.commit('setTugasRinci', paketTugas);
-                this.isTugasRinci = !this.isTugasRinci;
+                this.$router.push({name: 'rincianTugas', params: {pk: addon._id.$oid}});
             },
             refresher(index, done) {
                 setTimeout(() => {
@@ -172,9 +163,6 @@
                     });
                 }, 1000);
             },
-            onListenChild(val) {
-                this.onResetDaftarTugas();
-            }
         },
         filters: {
             tgl: function (value) {
