@@ -25,17 +25,20 @@ export default new VueRouter({
   scrollBehavior: () => ({y: 0}),
 
   routes: [
-    {path: '/',
-      component: load('Utama'),
-      name: 'utama',
-      children: [
-        {path: 'tugas', component: load('helper/ModalTugas'), name: 'tugas'},
-        {path: 'pendidikan', component: load('Tugas'), name: 'pendidikan'},
-        {path: 'kerekayasaan', component: load('Tugas'), name: 'kerekayasaan'},
-        {path: 'profesi', component: load('Tugas'), name: 'profesi'},
-        {path: 'penunjang', component: load('Tugas'), name: 'penunjang'},
-        {path: 'pernyataan', component: load('Pernyataan'), name: 'pernyataan'}
-      ]},
+      {path: '/',
+          component: load('Utama'),
+          name: 'utama',
+          children: [
+              {path: 'tugas', component: load('helper/ModalTugas'), name: 'tugas'},
+              {path: '/tugas/:pk', component: load('helper/tugas/TugasRinci'), name: 'rincianTugas'},
+              {path: '/tugas/:pk/ubah', component: load('helper/ModalTugas'), name: 'ubahTugas'},
+              {path: 'pendidikan', component: load('Tugas'), name: 'pendidikan'},
+              {path: 'kerekayasaan', component: load('Tugas'), name: 'kerekayasaan'},
+              {path: 'profesi', component: load('Tugas'), name: 'profesi'},
+              {path: 'penunjang', component: load('Tugas'), name: 'penunjang'},
+              {path: 'pernyataan', component: load('Pernyataan'), name: 'pernyataan'}
+          ]
+      },
 
     // Always leave this last one
     {path: '*', component: load('Error404')} // Not found
