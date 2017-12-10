@@ -185,14 +185,24 @@
         },
         created() {
             let pk = this.$route.params['pk'];
-            console.log(pk);
             if (pk) {
                 LihatTugasTertentu(pk).then(res => {
-                    this.tanggal = res.data.tanggal.$data;
-                    this.jenis = res.data.jenis;
+                    this.tanggal = res.data.tanggal.$date;
+                    this.jenis = res.data.kategori;
                     this.butir = res.data.butir;
+                    this.angka = res.data.angka;
                     this.satuan = res.data.satuan;
+                    this.uraian_singkat = res.data.uraian_singkat;
                     this.checkActiveTabs(this.satuan);
+                    this.onGetButir(this.jenis);
+                    this.isButirActive = !this.isButirActive;
+                    _.forEach(res.data['paket_tugas'], (v) => {
+                        _.forEach(v, (val, key) => {
+                            if (key !== 'nama') {
+                                this.$store.commit('setLk', {nama: key, value: val});
+                            }
+                        });
+                    });
                 }).catch(err => {
                     console.log(err);
                 });
@@ -266,11 +276,11 @@
                 }
                 this.$store.commit('setActiveTaskTab', this.dataActiveTabs);
             },
-            setTabs(TabName=null,
-                    LkActive=false,
-                    LbActive=false,
-                    TnActive=false,
-                    OthersActive=false) {
+            setTabs(TabName = null,
+                    LkActive = false,
+                    LbActive = false,
+                    TnActive = false,
+                    OthersActive = false) {
                 let opsi = {TabName, LkActive, LbActive, TnActive, OthersActive};
 
                 _.forEach(opsi, (v, k) => {
