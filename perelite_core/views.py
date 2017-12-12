@@ -1,8 +1,8 @@
 import json
 import datetime
 from django.http import HttpResponse
+from mongoengine import errors
 from rest_framework import generics
-from rest_framework import exceptions
 from . import models
 from perelite_utility.models import Personil
 from .proses import paket
@@ -83,17 +83,43 @@ class TugasModifikasi(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         try:
             tgs = models.Tugas.objects.get(pk=self.kwargs.get('tugas_id'))
+
+            return tgs
         except models.Tugas.DoesNotExist:
-            raise exceptions.NotFound()
+            self.tugas = False
 
-        except models.Tugas.MultipleObjectsReturned:
-            raise exceptions.NotAcceptable()
-
-        return tgs
+        except errors.ValidationError:
+            self.tugas = False
 
     def get(self, request, *args, **kwargs):
         return check_instance(self.get_object(),
                               models.Tugas)
+
+    def put(self, request, *args, **kwargs):
+        def execute():
+            pkt = json.loads(request.POST.get('paket_tugas'))
+            user = models.Personil.objects.get(username=request.user.username)
+
+            try:
+                return self.get_object().update(
+                    set__tanggal=request.POST.get('nama'),
+                    set__owner=user,
+                    set__kategori=request.POST.get('hasil'),
+                    set__butir=request.POST.get('angka'),
+                    set__angka=request.POST.get('pelaksana'),
+                    set__satuan=request.POST.get('jenis'),
+                    set__uraian_singkat=request.POST.get('jenis'),
+                    set__paket_tugas=paket(pkt),
+                )
+
+            except errors.ValidationError as err:
+                return json.dumps({
+                    'detail': err.message
+                })
+
+        return check_instance(self.get_object(),
+                              models.Tugas,
+                              execute())
 
     def destroy(self, request, *args, **kwargs):
         def execute():
