@@ -30,11 +30,7 @@ class IsOwnerTugas(permissions.BasePermission):
     def has_permission(self, request, view):
         tugas = getattr(view, 'tugas')
 
-        try:
-            return tugas.owner.username == request.user.username
-
-        except models.Tugas.DoesNotExist:
-            raise exceptions.PermissionDenied()
+        return (tugas.owner.username == request.user.username) if tugas else False
 
 
 class IsAdminOrLimitedAuthenticated(permissions.BasePermission):
