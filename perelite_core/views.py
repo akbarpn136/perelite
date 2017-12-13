@@ -98,18 +98,20 @@ class TugasModifikasi(generics.RetrieveUpdateDestroyAPIView):
     def put(self, request, *args, **kwargs):
         def execute():
             pkt = json.loads(request.POST.get('paket_tugas'))
+            obj = self.get_object()
             user = models.Personil.objects.get(username=request.user.username)
 
             try:
-                return self.get_object().update(
-                    set__tanggal=request.POST.get('nama'),
+                obj.paket_tugas = paket(pkt)
+                obj.save()
+                return obj.update(
+                    set__tanggal=request.POST.get('tanggal'),
                     set__owner=user,
-                    set__kategori=request.POST.get('hasil'),
-                    set__butir=request.POST.get('angka'),
-                    set__angka=request.POST.get('pelaksana'),
-                    set__satuan=request.POST.get('jenis'),
-                    set__uraian_singkat=request.POST.get('jenis'),
-                    set__paket_tugas=paket(pkt),
+                    set__kategori=request.POST.get('kategori'),
+                    set__butir=request.POST.get('butir'),
+                    set__angka=request.POST.get('angka'),
+                    set__satuan=request.POST.get('satuan'),
+                    set__uraian_singkat=request.POST.get('uraian_singkat')
                 )
 
             except errors.ValidationError as err:
