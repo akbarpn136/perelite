@@ -142,12 +142,12 @@
 
     import appTabsTugas from './TabsTugas.vue';
     import {GetButir} from '../../http/butir';
-    import {TambahTugas, LihatTugasTertentu} from '../../http/tugas';
+    import {TambahTugas, LihatTugasTertentu, UbahTugasTertentu} from '../../http/tugas';
 
     export default {
         data() {
             return {
-                modalStats: true,
+                mode: null,
                 opsi: ['tanggal', 'jenis', 'butir', 'angka', 'satuan', 'uraian_singkat'],
                 koleksiButir: null,
                 opsiJenis: [
@@ -186,6 +186,7 @@
         created() {
             let pk = this.$route.params['pk'];
             if (pk) {
+                this.mode = 'ubah';
                 LihatTugasTertentu(pk).then(res => {
                     this.tanggal = res.data.tanggal.$date;
                     this.jenis = res.data.kategori;
@@ -206,6 +207,8 @@
                 }).catch(err => {
                     console.log(err);
                 });
+            } else {
+                this.mode = 'tambah';
             }
         },
         methods: {
@@ -335,15 +338,28 @@
                         payload.append('uraian_singkat', obj.uraian_singkat);
                         payload.append('paket_tugas', JSON.stringify(paket));
 
-                        TambahTugas(payload).then((res) => {
-                            Toast.create.positive('Tugas berhasil disimpan.');
-                            this.$router.push({name: this.jenis});
-                            this.clearForm();
-                        }).catch((err) => {
-                            _.forEach(err.response.data, (v, k) => {
-                                Toast.create.negative(`${k}: ${v}`);
+                        if (this.mode === 'tambah') {
+                            TambahTugas(payload).then((res) => {
+                                Toast.create.positive('Tugas berhasil disimpan.');
+                                this.$router.push({name: this.jenis});
+                                this.clearForm();
+                            }).catch((err) => {
+                                _.forEach(err.response.data, (v, k) => {
+                                    Toast.create.negative(`${k}: ${v}`);
+                                });
                             });
-                        });
+                        } else {
+                            // Ubah tugas is here...
+                            UbahTugasTertentu(this.$route.params['pk'], payload).then((res) => {
+                                Toast.create.positive('Tugas berhasil disimpan.');
+                                this.$router.push({name: this.jenis});
+                                this.clearForm();
+                            }).catch((err) => {
+                                _.forEach(err.response.data, (v, k) => {
+                                    Toast.create.negative(`${k}: ${v}`);
+                                });
+                            });
+                        }
                     } else {
                         Toast.create.negative('Perbaiki kesalahan yang terjadi.');
                     }
