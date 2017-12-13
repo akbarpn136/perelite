@@ -37,6 +37,14 @@ function TambahTugas(payload) {
     });
 }
 
+function UbahTugasTertentu(pk, payload) {
+    return axios.put(`${URL_TUGAS}${pk}/rincian/`, payload, {
+        headers: {
+            'Authorization': `Bearer ${QWERTY.uid}`
+        }
+    });
+}
+
 function HapusTugas(id) {
     return axios.delete(`${URL_TUGAS}${id}/rincian/`, {
         headers: {
@@ -49,5 +57,6 @@ export {
     LihatTugas,
     LihatTugasTertentu,
     TambahTugas,
+    UbahTugasTertentu,
     HapusTugas
 };
