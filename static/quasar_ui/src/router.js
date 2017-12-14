@@ -32,6 +32,7 @@ export default new VueRouter({
               {path: 'tugas', component: load('helper/ModalTugas'), name: 'tugas'},
               {path: '/tugas/:pk', component: load('helper/tugas/TugasRinci'), name: 'rincianTugas'},
               {path: '/tugas/:pk/ubah', component: load('helper/ModalTugas'), name: 'ubahTugas'},
+              {path: '/tugas/:pk/duplikat', component: load('helper/ModalTugas'), name: 'duplikatTugas'},
               {path: 'pendidikan', component: load('Tugas'), name: 'pendidikan'},
               {path: 'kerekayasaan', component: load('Tugas'), name: 'kerekayasaan'},
               {path: 'profesi', component: load('Tugas'), name: 'profesi'},
