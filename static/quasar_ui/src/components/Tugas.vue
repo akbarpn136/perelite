@@ -42,6 +42,11 @@
                         </thead>
                         <tbody>
                         <tr v-for="(tugas, idx) in daftarTugas" :key="tugas._id.$oid">
+                            <q-context-menu>
+                                <q-list link>
+                                    <q-item @click="onDuplikatTugas(tugas._id.$oid)">Duplikat tugas</q-item>
+                                </q-list>
+                            </q-context-menu>
                             <td data-th="#" class="text-right">{{idx+1}}</td>
                             <td data-th="Uraian kegiatan" class="text-left">{{tugas.uraian_singkat}}</td>
                             <td data-th="Tanggal" class="text-right">{{tugas.tanggal.$date | tgl}}</td>
@@ -81,7 +86,10 @@
         QDatetimeRange,
         Toast,
         QInfiniteScroll,
-        QSpinnerDots
+        QSpinnerDots,
+        QContextMenu,
+        QList,
+        QItem,
     } from 'quasar';
 
     import {LihatTugas} from '../http/tugas';
@@ -99,6 +107,9 @@
             Toast,
             QInfiniteScroll,
             QSpinnerDots,
+            QContextMenu,
+            QList,
+            QItem,
         },
         data() {
             return {
@@ -163,6 +174,9 @@
                     });
                 }, 1000);
             },
+            onDuplikatTugas(pk) {
+                this.$router.push({name: 'duplikatTugas', params: {pk}})
+            }
         },
         filters: {
             tgl: function (value) {
