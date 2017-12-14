@@ -186,7 +186,7 @@
         created() {
             let pk = this.$route.params['pk'];
             if (pk) {
-                this.mode = 'ubah';
+                this.mode = (this.$route.name === 'duplikatTugas') ? 'tambah': 'ubah';
                 LihatTugasTertentu(pk).then(res => {
                     this.tanggal = res.data.tanggal.$date;
                     this.jenis = res.data.kategori;
