@@ -8,7 +8,9 @@
         <q-tab-pane name="lk">
             <app-lk></app-lk>
         </q-tab-pane>
-        <q-tab-pane name="lb">Logbook</q-tab-pane>
+        <q-tab-pane name="lb">
+            <app-lb></app-lb>
+        </q-tab-pane>
         <q-tab-pane name="tn">Technical note</q-tab-pane>
         <q-tab-pane name="ot">Konten lainnya</q-tab-pane>
     </q-tabs>
