@@ -120,22 +120,22 @@
                 <q-list separator>
                     <q-collapsible
                         icon="perm_identity"
-                        label="Data Pemberi Tugas" opened>
+                        label="Data Pemeriksa Tugas" opened>
                         <div class="row">
                             <div class="col">
                                 <q-field
                                     helper=""
-                                    :error="$v.nama_pemberi.$error"
+                                    :error="$v.nama_pemeriksa.$error"
                                     icon="info"
-                                    label="Nama lengkap pemberi"
+                                    label="Nama lengkap pemeriksa"
                                     :label-width="3"
                                     error-label="Harus diisi">
                                     <q-input
                                         color="secondary"
                                         float-label="Nama"
-                                        v-model="nama_pemberi"
+                                        v-model="nama_pemeriksa"
                                         type="text"
-                                        @blur="$v.nama_pemberi.$touch(), addToTaskPackage('nama_pemberi')">
+                                        @blur="$v.nama_pemeriksa.$touch(), addToTaskPackage('nama_pemeriksa')">
                                     </q-input>
                                 </q-field>
                             </div>
@@ -144,17 +144,59 @@
                             <div class="col">
                                 <q-field
                                     helper=""
-                                    :error="$v.peran_pemberi.$error"
+                                    :error="$v.peran_pemeriksa.$error"
                                     icon="perm data setting"
-                                    label="Peran pemberi"
+                                    label="Peran pemeriksa"
                                     :label-width="3"
                                     error-label="Harus diisi">
                                     <q-input
                                         color="secondary"
                                         float-label="Peran"
-                                        v-model="peran_pemberi"
+                                        v-model="peran_pemeriksa"
                                         type="text"
-                                        @blur="$v.peran_pemberi.$touch(), addToTaskPackage('peran_pemberi')">
+                                        @blur="$v.peran_pemeriksa.$touch(), addToTaskPackage('peran_pemeriksa')">
+                                    </q-input>
+                                </q-field>
+                            </div>
+                        </div>
+                    </q-collapsible>
+                    <q-collapsible
+                        icon="perm_identity"
+                        label="Data Verifikator Tugas">
+                        <div class="row">
+                            <div class="col">
+                                <q-field
+                                    helper=""
+                                    :error="$v.nama_penyetuju.$error"
+                                    icon="info"
+                                    label="Nama lengkap verifikator"
+                                    :label-width="3"
+                                    error-label="Harus diisi">
+                                    <q-input
+                                        color="secondary"
+                                        float-label="Nama"
+                                        v-model="nama_penyetuju"
+                                        type="text"
+                                        @blur="$v.nama_penyetuju.$touch(), addToTaskPackage('nama_penyetuju')">
+                                    </q-input>
+                                </q-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <q-field
+                                    helper=""
+                                    :error="$v.peran_penyetuju.$error"
+                                    icon="perm data setting"
+                                    label="Peran verifikator"
+                                    :label-width="3"
+                                    error-label="Harus diisi">
+                                    <q-input
+                                        color="secondary"
+                                        float-label="Peran"
+                                        v-model="peran_penyetuju"
+                                        type="text"
+                                        @blur="$v.peran_penyetuju.$touch(), addToTaskPackage('peran_penyetuju')">
                                     </q-input>
                                 </q-field>
                             </div>
@@ -224,8 +266,10 @@
             judul: {required},
             unit_kerja: {required},
             pusat_kerja: {required},
-            nama_pemberi: {required},
-            peran_pemberi: {required}
+            nama_pemeriksa: {required},
+            peran_pemeriksa: {required},
+            nama_penyetuju: {required},
+            peran_penyetuju: {required},
         },
         computed: {
             nomor: {
@@ -276,20 +320,36 @@
                     this.$store.commit('setLb', {nama: 'pusat_kerja', value});
                 }
             },
-            nama_pemberi: {
+            nama_pemeriksa: {
                 get() {
-                    return this.$store.getters.getLbByName('nama_pemberi');
+                    return this.$store.getters.getLbByName('nama_pemeriksa');
                 },
                 set(value) {
-                    this.$store.commit('setLb', {nama: 'nama_pemberi', value});
+                    this.$store.commit('setLb', {nama: 'nama_pemeriksa', value});
                 }
             },
-            peran_pemberi: {
+            peran_pemeriksa: {
                 get() {
-                    return this.$store.getters.getLbByName('peran_pemberi');
+                    return this.$store.getters.getLbByName('peran_pemeriksa');
                 },
                 set(value) {
-                    this.$store.commit('setLb', {nama: 'peran_pemberi', value});
+                    this.$store.commit('setLb', {nama: 'peran_pemeriksa', value});
+                }
+            },
+            nama_penyetuju: {
+                get() {
+                    return this.$store.getters.getLbByName('nama_penyetuju');
+                },
+                set(value) {
+                    this.$store.commit('setLb', {nama: 'nama_penyetuju', value});
+                }
+            },
+            peran_penyetuju: {
+                get() {
+                    return this.$store.getters.getLbByName('peran_penyetuju');
+                },
+                set(value) {
+                    this.$store.commit('setLb', {nama: 'peran_penyetuju', value});
                 }
             },
         },
@@ -318,8 +378,8 @@
                     unit_kerja: this.unit_kerja,
                     pusat_kerja: this.pusat_kerja,
                     uraian_lengkap: this.uraian_lengkap,
-                    nama_pemberi: this.nama_pemberi,
-                    peran_pemberi: this.peran_pemberi,
+                    nama_pemeriksa: this.nama_pemeriksa,
+                    peran_pemeriksa: this.peran_pemeriksa,
                 };
 
                 this.$store.commit('setLb', {nama: 'validasi', value: null});
