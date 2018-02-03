@@ -7,8 +7,10 @@ const lb = {
     unit_kerja: null,
     pusat_kerja: null,
     uraian_lengkap: null,
-    nama_pemberi: null,
-    peran_pemberi: null,
+    nama_pemeriksa: null,
+    peran_pemeriksa: null,
+    nama_penyetuju: null,
+    peran_penyetuju: null,
     validasi: null
 };
 
