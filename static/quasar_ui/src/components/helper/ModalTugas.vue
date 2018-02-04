@@ -197,13 +197,7 @@
                     this.checkActiveTabs(this.satuan);
                     this.onGetButir(this.jenis);
                     this.isButirActive = !this.isButirActive;
-                    _.forEach(res.data['paket_tugas'], (v) => {
-                        _.forEach(v, (val, key) => {
-                            if (key !== 'nama') {
-                                this.$store.commit('setLk', {nama: key, value: val});
-                            }
-                        });
-                    });
+                    this.assignTaskPackages(res.data['paket_tugas']);
                 }).catch(err => {
                     console.log(err);
                 });
@@ -212,6 +206,26 @@
             }
         },
         methods: {
+            assignTaskPackages(data) {
+                const lk = data.filter(el => {
+                    return el.nama === 'LEMBAR KERJA';
+                });
+                const lb = data.filter(el => {
+                    return el.nama === 'LOGBOOK';
+                });
+
+                if (lk.length > 0) {
+                    _.forEach(lk[0], (v, k) => {
+                        this.$store.commit('setLk', {nama: k, value: v});
+                    });
+                }
+
+                if (lb.length > 0) {
+                    _.forEach(lb[0], (v, k) => {
+                        this.$store.commit('setLb', {nama: k, value: v});
+                    });
+                }
+            },
             onBatalClick() {
                 this.$v.$reset();
                 this.clearForm();
@@ -308,9 +322,15 @@
             clearTaskPackage() {
                 this.$store.commit('clearTaskPackages');
                 let lk = this.$store.getters.getLkByName();
+                let lb = this.$store.getters.getLbByName();
                 _.forEach(lk, (v, k) => {
                     if (v !== 'LEMBAR KERJA') {
                         this.$store.commit('setLk', {nama: k, value: null});
+                    }
+                });
+                _.forEach(lb, (v, k) => {
+                    if (v !== 'LOGBOOK') {
+                        this.$store.commit('setLb', {nama: k, value: null});
                     }
                 });
             },
@@ -318,50 +338,53 @@
                 let obj = this.$store.getters.getTugasByName();
                 let paketTugas = this.$store.getters.getTaskPackages;
                 let validasiLk = this.$store.getters.getLkByName('validasi');
+                let validasiLb = this.$store.getters.getLbByName('validasi');
 
                 this.$v.$touch();
                 if (validasiLk) validasiLk.$touch();
+                if (validasiLb) validasiLb.$touch();
 
                 if (!this.$v.$invalid) {
                     let paket = [];
-                    if (validasiLk && !validasiLk.$invalid) {
-                        _.forEach(obj.taskPackages, (v) => {
-                            paket.push(JSON.stringify(v));
+                    _.forEach(obj.taskPackages, (v) => {
+                        paket.push(JSON.stringify(v));
+                    });
+
+                    let payload = new FormData();
+                    payload.append('tanggal', new Date(obj.tanggal).toLocaleDateString());
+                    payload.append('kategori', obj.jenis);
+                    payload.append('butir', obj.butir);
+                    payload.append('angka', obj.angka);
+                    payload.append('satuan', obj.satuan);
+                    payload.append('uraian_singkat', obj.uraian_singkat);
+                    payload.append('paket_tugas', JSON.stringify(paket));
+
+                    if (this.mode === 'tambah') {
+                        TambahTugas(payload).then((res) => {
+                            Toast.create.positive('Tugas berhasil disimpan.');
+                            this.$router.push({name: this.jenis});
+                            this.clearForm();
+                        }).catch((err) => {
+                            _.forEach(err.response.data, (v, k) => {
+                                if (k === 'paket_tugas') {
+                                    Toast.create.negative('Masing-masing input paket tugas harus diisi');
+                                }
+                                else {
+                                    Toast.create.negative(`${k}: ${v}`);
+                                }
+                            });
                         });
-
-                        let payload = new FormData();
-                        payload.append('tanggal', new Date(obj.tanggal).toLocaleDateString());
-                        payload.append('kategori', obj.jenis);
-                        payload.append('butir', obj.butir);
-                        payload.append('angka', obj.angka);
-                        payload.append('satuan', obj.satuan);
-                        payload.append('uraian_singkat', obj.uraian_singkat);
-                        payload.append('paket_tugas', JSON.stringify(paket));
-
-                        if (this.mode === 'tambah') {
-                            TambahTugas(payload).then((res) => {
-                                Toast.create.positive('Tugas berhasil disimpan.');
-                                this.$router.push({name: this.jenis});
-                                this.clearForm();
-                            }).catch((err) => {
-                                _.forEach(err.response.data, (v, k) => {
-                                    Toast.create.negative(`${k}: ${v}`);
-                                });
-                            });
-                        } else {
-                            // Ubah tugas is here...
-                            UbahTugasTertentu(this.$route.params['pk'], payload).then((res) => {
-                                Toast.create.positive('Tugas berhasil disimpan.');
-                                this.$router.push({name: this.jenis});
-                                this.clearForm();
-                            }).catch((err) => {
-                                _.forEach(err.response.data, (v, k) => {
-                                    Toast.create.negative(`${k}: ${v}`);
-                                });
-                            });
-                        }
                     } else {
-                        Toast.create.negative('Perbaiki kesalahan yang terjadi.');
+                        // Ubah tugas is here...
+                        UbahTugasTertentu(this.$route.params['pk'], payload).then((res) => {
+                            Toast.create.positive('Tugas berhasil disimpan.');
+                            this.$router.push({name: this.jenis});
+                            this.clearForm();
+                        }).catch((err) => {
+                            _.forEach(err.response.data, (v, k) => {
+                                Toast.create.negative(`${k}: ${v}`);
+                            });
+                        });
                     }
 
                 } else {
