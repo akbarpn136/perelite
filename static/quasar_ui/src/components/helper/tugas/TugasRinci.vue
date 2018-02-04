@@ -21,7 +21,7 @@
         </q-card-title>
         <q-card-separator></q-card-separator>
         <q-card-main>
-            <div id="Lk" v-if="this.tugas._cls === 'Lk'" ref="Lk">
+            <div id="tgs" v-if="this.tugas._cls === 'Lk'" ref="tgs">
                 <table class="q-table cell-separator compact full-width">
                     <tbody>
                     <tr>
@@ -103,6 +103,90 @@
                     </tbody>
                 </table>
             </div>
+            <div id="tgs" v-if="this.tugas._cls === 'Lb'" ref="tgs">
+                <div class="row md-gutter">
+                    <div class="col-2 self-center">
+                        <img src="../../../assets/logbook.png" alt="logbook">
+                    </div>
+                    <div class="col-10">
+                        <div class="row justify-between" style="margin-bottom: 105px;">
+                            <div class="col-6"></div>
+                            <div class="col-6">
+                                <table class="q-table cell-separator compact full-width">
+                                    <tr>
+                                        <td>Tanggal</td>
+                                        <td>{{tugas.tanggal.$date | tgl}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row justify-between" style="margin-bottom: 65px;">
+                            <div class="col-4"></div>
+                            <div class="col-7 text-right">
+                                <img src="../../../assets/logo_bppt.jpg" alt="logo" width="92">
+                            </div>
+                        </div>
+                        <div class="row justify-between" style="margin-bottom: 85px;">
+                            <div class="col-4"></div>
+                            <div class="col-7 text-right">
+                                <h5>{{tugas.nomor}}</h5>
+                                <h5>{{tugas.kode_peran}}</h5>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 85px;">
+                            <div class="col text-right">
+                                <h2>{{tugas.judul}}</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col text-center">
+                                <h6 class="uppercase">{{tugas.unit_kerja}}</h6>
+                                <h6 class="uppercase">{{tugas.pusat_kerja}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="q-table cell-separator bordered compact full-width" style="margin-top: 25px;">
+                    <tbody>
+                    <tr>
+                        <td class="text-left" colspan="2">
+                            Dibuat oleh:
+                        </td>
+                        <td class="text-left" colspan="2">
+                            Diperiksa oleh:
+                        </td>
+                        <td class="text-left" colspan="2">
+                            Disetujui oleh:
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Nama</td>
+                        <td>{{user}}</td>
+                        <td>Nama</td>
+                        <td>{{tugas.nama_pemeriksa}}</td>
+                        <td>Nama</td>
+                        <td>{{tugas.nama_penyetuju}}</td>
+                    </tr>
+                    <tr>
+                        <td>Peran</td>
+                        <td>{{tugas.kode_peran}}</td>
+                        <td>Peran</td>
+                        <td>{{tugas.peran_pemeriksa}}</td>
+                        <td>Peran</td>
+                        <td>{{tugas.peran_penyetuju}}</td>
+                    </tr>
+                    <tr>
+                        <td class="vertical-top">Ttd</td>
+                        <td><br><br><br><br></td>
+                        <td class="vertical-top">Ttd</td>
+                        <td><br><br><br><br></td>
+                        <td class="vertical-top">Ttd</td>
+                        <td><br><br><br><br></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div v-html="tugas.uraian_lengkap" class="mt-4"></div>
+            </div>
         </q-card-main>
     </q-card>
 </template>
@@ -146,12 +230,12 @@
         },
         methods: {
             onCetak() {
-                html2pdf(this.$refs.Lk, {
+                html2pdf(this.$refs.tgs, {
                     margin: 1,
                     enableLinks: true,
-                    filename: `${this.$refs.Lk.id}.pdf`,
+                    filename: `${this.$refs.tgs.id}.pdf`,
                     image: {type: 'jpeg', quality: 0.98},
-                    html2canvas: {dpi: 192, letterRendering: true},
+                    html2canvas: {dpi: 300, letterRendering: true},
                     jsPDF: {unit: 'cm', format: 'a4', orientation: 'portrait'}
                 });
             },
@@ -196,5 +280,4 @@
 </script>
 
 <style>
-
 </style>
