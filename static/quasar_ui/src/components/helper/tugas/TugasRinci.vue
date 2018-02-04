@@ -62,7 +62,7 @@
                                 </dd>
                             </dl>
                         </td>
-                        <td class="text-right" colspan="2">{{tugas.tanggal | tgl}}</td>
+                        <td class="text-right" colspan="2">{{tugas.tanggal.$date | tgl}}</td>
                     </tr>
                     <tr>
                         <td class="text-left" colspan="4">
