@@ -380,6 +380,8 @@
                     uraian_lengkap: this.uraian_lengkap,
                     nama_pemeriksa: this.nama_pemeriksa,
                     peran_pemeriksa: this.peran_pemeriksa,
+                    nama_penyetuju: this.nama_penyetuju,
+                    peran_penyetuju: this.peran_penyetuju
                 };
 
                 this.$store.commit('setLb', {nama: 'validasi', value: null});
