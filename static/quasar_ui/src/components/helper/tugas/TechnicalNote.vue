@@ -220,7 +220,7 @@
 
     export default {
         created() {
-            this.$store.commit('setLb', {nama: 'validasi', value: this.$v});
+            this.$store.commit('setTn', {nama: 'validasi', value: this.$v});
         },
 
         components: {
@@ -274,82 +274,82 @@
         computed: {
             nomor: {
                 get() {
-                    return this.$store.getters.getLbByName('nomor');
+                    return this.$store.getters.getTnByName('nomor');
                 },
                 set(value) {
-                    this.$store.commit('setLb', {nama: 'nomor', value});
+                    this.$store.commit('setTn', {nama: 'nomor', value});
                 }
             },
             judul: {
                 get() {
-                    return this.$store.getters.getLbByName('judul');
+                    return this.$store.getters.getTnByName('judul');
                 },
                 set(value) {
-                    this.$store.commit('setLb', {nama: 'judul', value});
+                    this.$store.commit('setTn', {nama: 'judul', value});
                 }
             },
             kode_peran: {
                 get() {
-                    return this.$store.getters.getLbByName('kode_peran');
+                    return this.$store.getters.getTnByName('kode_peran');
                 },
                 set(value) {
-                    this.$store.commit('setLb', {nama: 'kode_peran', value});
+                    this.$store.commit('setTn', {nama: 'kode_peran', value});
                 }
             },
             uraian_lengkap: {
                 get() {
-                    return this.$store.getters.getLbByName('uraian_lengkap');
+                    return this.$store.getters.getTnByName('uraian_lengkap');
                 },
                 set(value) {
-                    this.$store.commit('setLb', {nama: 'uraian_lengkap', value});
+                    this.$store.commit('setTn', {nama: 'uraian_lengkap', value});
                 }
             },
             unit_kerja: {
                 get() {
-                    return this.$store.getters.getLbByName('unit_kerja');
+                    return this.$store.getters.getTnByName('unit_kerja');
                 },
                 set(value) {
-                    this.$store.commit('setLb', {nama: 'unit_kerja', value});
+                    this.$store.commit('setTn', {nama: 'unit_kerja', value});
                 }
             },
             pusat_kerja: {
                 get() {
-                    return this.$store.getters.getLbByName('pusat_kerja');
+                    return this.$store.getters.getTnByName('pusat_kerja');
                 },
                 set(value) {
-                    this.$store.commit('setLb', {nama: 'pusat_kerja', value});
+                    this.$store.commit('setTn', {nama: 'pusat_kerja', value});
                 }
             },
             nama_pemeriksa: {
                 get() {
-                    return this.$store.getters.getLbByName('nama_pemeriksa');
+                    return this.$store.getters.getTnByName('nama_pemeriksa');
                 },
                 set(value) {
-                    this.$store.commit('setLb', {nama: 'nama_pemeriksa', value});
+                    this.$store.commit('setTn', {nama: 'nama_pemeriksa', value});
                 }
             },
             peran_pemeriksa: {
                 get() {
-                    return this.$store.getters.getLbByName('peran_pemeriksa');
+                    return this.$store.getters.getTnByName('peran_pemeriksa');
                 },
                 set(value) {
-                    this.$store.commit('setLb', {nama: 'peran_pemeriksa', value});
+                    this.$store.commit('setTn', {nama: 'peran_pemeriksa', value});
                 }
             },
             nama_penyetuju: {
                 get() {
-                    return this.$store.getters.getLbByName('nama_penyetuju');
+                    return this.$store.getters.getTnByName('nama_penyetuju');
                 },
                 set(value) {
-                    this.$store.commit('setLb', {nama: 'nama_penyetuju', value});
+                    this.$store.commit('setTn', {nama: 'nama_penyetuju', value});
                 }
             },
             peran_penyetuju: {
                 get() {
-                    return this.$store.getters.getLbByName('peran_penyetuju');
+                    return this.$store.getters.getTnByName('peran_penyetuju');
                 },
                 set(value) {
-                    this.$store.commit('setLb', {nama: 'peran_penyetuju', value});
+                    this.$store.commit('setTn', {nama: 'peran_penyetuju', value});
                 }
             },
         },
@@ -369,9 +369,9 @@
                 });
             },
             addToTaskPackage(info) {
-                let key = {nama: 'LOGBOOK'};
+                let key = {nama: 'TECHNICAL NOTE'};
                 let payload = {
-                    nama: 'LOGBOOK',
+                    nama: 'TECHNICAL NOTE',
                     nomor: this.nomor,
                     kode_peran: this.kode_peran,
                     judul: this.judul,
@@ -384,8 +384,8 @@
                     peran_penyetuju: this.peran_penyetuju
                 };
 
-                this.$store.commit('setLb', {nama: 'validasi', value: null});
-                this.$store.commit('setLb', {nama: 'validasi', value: this.$v});
+                this.$store.commit('setTn', {nama: 'validasi', value: null});
+                this.$store.commit('setTn', {nama: 'validasi', value: this.$v});
 
                 if (info !== 'uraian_lengkap') {
                     if (!this.$v[info].$error) this.$store.commit('setTaskPackages', {key, payload});
