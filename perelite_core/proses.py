@@ -41,7 +41,21 @@ def paket(package):
 
             paket_tugas.append(lb)
         elif p.get('nama') == 'TECHNICAL NOTE':
-            pass
+            tn = models.Lb(
+                nama=p['nama'],
+                nomor=p['nomor'],
+                kode_peran=p['kode_peran'],
+                judul=p['judul'],
+                unit_kerja=p['unit_kerja'],
+                pusat_kerja=p['pusat_kerja'],
+                uraian_lengkap=p['uraian_lengkap'],
+                nama_pemeriksa=p['nama_pemeriksa'],
+                peran_pemeriksa=p['peran_pemeriksa'],
+                nama_penyetuju=p['nama_penyetuju'],
+                peran_penyetuju=p['peran_penyetuju'],
+            )
+
+            paket_tugas.append(tn)
         elif p.get('nama') == 'OTHERS':
             pass
 
