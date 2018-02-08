@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import * as _ from 'lodash';
 import {lk, getLkByName} from './tugas/lk';
 import {lb, getLbByName} from './tugas/lb';
+import {tn, getTnByName} from './tugas/tn';
 import {tugas, tugasRinci, getTugasByName} from './tugas/tugas';
 
 Vue.use(Vuex);
@@ -19,7 +20,8 @@ export default new Vuex.Store({
         tugas,
         tugasRinci,
         lk,
-        lb
+        lb,
+        tn
     },
     getters: {
         getActiveTaskTab(state) {
@@ -33,7 +35,8 @@ export default new Vuex.Store({
         },
         getTugasByName,
         getLkByName,
-        getLbByName
+        getLbByName,
+        getTnByName
     },
     mutations: {
         setTaskPackages(state, data) {
@@ -67,6 +70,9 @@ export default new Vuex.Store({
         },
         setLb(state, payload) {
             state.lb[payload.nama] = payload.value;
+        },
+        setTn(state, payload) {
+            state.tn[payload.nama] = payload.value;
         }
     }
 });
