@@ -21,7 +21,7 @@
         </q-card-title>
         <q-card-separator></q-card-separator>
         <q-card-main>
-            <div id="tgs" v-if="this.tugas._cls === 'Lk'" ref="tgs">
+            <div id="tgs" v-if="tugas._cls === 'Lk'" ref="tgs">
                 <table class="q-table cell-separator compact full-width">
                     <tbody>
                     <tr>
@@ -103,10 +103,17 @@
                     </tbody>
                 </table>
             </div>
-            <div id="tgs" v-if="this.tugas._cls === 'Lb'" ref="tgs">
+            <div id="tgs" v-if="checkTugas(tugas)" ref="tgs">
                 <div class="row md-gutter">
                     <div class="col-2 self-center">
-                        <img src="../../../assets/logbook.png" alt="logbook">
+                        <img
+                            src="../../../assets/logbook.png"
+                            alt="logbook"
+                            v-if="tugas._cls === 'Lk'">
+                        <img
+                            src="../../../assets/technicalNote.png"
+                            alt="logbook"
+                            v-if="tugas._cls === 'Tn'">
                     </div>
                     <div class="col-10">
                         <div class="row justify-between" style="margin-bottom: 105px;">
@@ -126,14 +133,14 @@
                                 <img src="../../../assets/logo_bppt.jpg" alt="logo" width="92">
                             </div>
                         </div>
-                        <div class="row justify-between" style="margin-bottom: 85px;">
+                        <div class="row justify-between" style="margin-bottom: 25px;">
                             <div class="col-4"></div>
                             <div class="col-7 text-right">
                                 <h5>{{tugas.nomor}}</h5>
                                 <h5>{{tugas.kode_peran}}</h5>
                             </div>
                         </div>
-                        <div class="row" style="margin-bottom: 85px;">
+                        <div class="row" style="margin-bottom: 25px;">
                             <div class="col text-right">
                                 <h2>{{tugas.judul}}</h2>
                             </div>
@@ -229,6 +236,9 @@
             }
         },
         methods: {
+            checkTugas(tugas) {
+                return (tugas._cls === 'Lb') || (tugas._cls === 'Tn')
+            },
             onCetak() {
                 html2pdf(this.$refs.tgs, {
                     margin: 1,
