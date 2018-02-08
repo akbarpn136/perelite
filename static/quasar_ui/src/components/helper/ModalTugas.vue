@@ -198,6 +198,13 @@
                     this.onGetButir(this.jenis);
                     this.isButirActive = !this.isButirActive;
                     this.assignTaskPackages(res.data['paket_tugas']);
+                    this.$store.commit('clearTaskPackages');
+                    _.forEach(res.data['paket_tugas'], v => {
+                        this.$store.commit('setTaskPackages', {
+                            key: {nama: v.nama},
+                            payload: v
+                        });
+                    });
                 }).catch(err => {
                     console.log(err);
                 });
