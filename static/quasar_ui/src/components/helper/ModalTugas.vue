@@ -221,7 +221,7 @@
                     return el.nama === 'LOGBOOK';
                 });
                 const tn = data.filter(el => {
-                    return el.nama === 'LOGBOOK';
+                    return el.nama === 'TECHNICAL NOTE';
                 });
 
                 if (lk.length > 0) {
