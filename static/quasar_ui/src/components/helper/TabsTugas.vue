@@ -11,7 +11,9 @@
         <q-tab-pane name="lb">
             <app-lb></app-lb>
         </q-tab-pane>
-        <q-tab-pane name="tn">Technical note</q-tab-pane>
+        <q-tab-pane name="tn">
+            <app-tn></app-tn>
+        </q-tab-pane>
         <q-tab-pane name="ot">Konten lainnya</q-tab-pane>
     </q-tabs>
 </template>
