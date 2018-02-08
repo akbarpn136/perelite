@@ -220,6 +220,9 @@
                 const lb = data.filter(el => {
                     return el.nama === 'LOGBOOK';
                 });
+                const tn = data.filter(el => {
+                    return el.nama === 'LOGBOOK';
+                });
 
                 if (lk.length > 0) {
                     _.forEach(lk[0], (v, k) => {
@@ -230,6 +233,12 @@
                 if (lb.length > 0) {
                     _.forEach(lb[0], (v, k) => {
                         this.$store.commit('setLb', {nama: k, value: v});
+                    });
+                }
+
+                if (tn.length > 0) {
+                    _.forEach(tn[0], (v, k) => {
+                        this.$store.commit('setTn', {nama: k, value: v});
                     });
                 }
             },
@@ -330,6 +339,7 @@
                 this.$store.commit('clearTaskPackages');
                 let lk = this.$store.getters.getLkByName();
                 let lb = this.$store.getters.getLbByName();
+                let tn = this.$store.getters.getTnByName();
                 _.forEach(lk, (v, k) => {
                     if (v !== 'LEMBAR KERJA') {
                         this.$store.commit('setLk', {nama: k, value: null});
@@ -340,16 +350,23 @@
                         this.$store.commit('setLb', {nama: k, value: null});
                     }
                 });
+                _.forEach(tn, (v, k) => {
+                    if (v !== 'TECHNICAL NOTE') {
+                        this.$store.commit('setLb', {nama: k, value: null});
+                    }
+                });
             },
             onFormTugasSubmit() {
                 let obj = this.$store.getters.getTugasByName();
                 let paketTugas = this.$store.getters.getTaskPackages;
                 let validasiLk = this.$store.getters.getLkByName('validasi');
                 let validasiLb = this.$store.getters.getLbByName('validasi');
+                let validasiTn = this.$store.getters.getTnByName('validasi');
 
                 this.$v.$touch();
                 if (validasiLk) validasiLk.$touch();
                 if (validasiLb) validasiLb.$touch();
+                if (validasiTn) validasiTn.$touch();
 
                 if (!this.$v.$invalid) {
                     let paket = [];
