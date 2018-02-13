@@ -57,6 +57,12 @@ def paket(package):
 
             paket_tugas.append(tn)
         elif p.get('nama') == 'OTHERS':
-            pass
+            ot = models.Others(
+                nama=p['nama'],
+                nomor=p['nomor'],
+                url=p['url'],
+            )
+
+            paket_tugas.append(ot)
 
     return paket_tugas
