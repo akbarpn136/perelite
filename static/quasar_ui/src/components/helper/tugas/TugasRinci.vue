@@ -256,10 +256,7 @@
                     message: 'Tugas yang dihapus tidak dapat dikembalikan lagi.',
                     buttons: [
                         {
-                            label: 'Batal',
-                            handler() {
-                                Toast.create('Disagreed...')
-                            }
+                            label: 'Batal'
                         },
                         {
                             label: 'Hapus',
