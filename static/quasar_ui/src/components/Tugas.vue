@@ -44,7 +44,9 @@
                         <tr v-for="(tugas, idx) in daftarTugas" :key="tugas._id.$oid">
                             <q-context-menu>
                                 <q-list link>
+                                    <q-item @click="$router.push({name: 'ubahTugas', params: {pk: tugas._id.$oid}})">Ubah tugas</q-item>
                                     <q-item @click="onDuplikatTugas(tugas._id.$oid)">Duplikat tugas</q-item>
+                                    <q-item @click="onDeleteTugas(tugas._id.$oid)">Hapus tugas</q-item>
                                 </q-list>
                             </q-context-menu>
                             <td data-th="#" class="text-right">{{idx+1}}</td>
@@ -77,6 +79,7 @@
 
 <script>
     import {
+        Dialog,
         QChip,
         QCard,
         QCardTitle,
@@ -93,6 +96,7 @@
     } from 'quasar';
 
     import {LihatTugas} from '../http/tugas';
+    import {HapusTugas} from '../http/tugas';
     import * as _ from 'lodash';
 
     export default {
@@ -176,6 +180,32 @@
             },
             onDuplikatTugas(pk) {
                 this.$router.push({name: 'duplikatTugas', params: {pk}})
+            },
+            onDeleteTugas(id) {
+                Dialog.create({
+                    title: 'Anda yakin?',
+                    message: 'Tugas yang dihapus tidak dapat dikembalikan lagi.',
+                    buttons: [
+                        {
+                            label: 'Batal'
+                        },
+                        {
+                            label: 'Hapus',
+                            color: 'negative',
+                            handler: () => {
+                                HapusTugas(id).then(() => {
+                                    Toast.create.positive('Tugas berhasil dihapus');
+                                    this.$emit('trigger', true);
+                                    this.$router.go(-1);
+                                }).catch((err) => {
+                                    _.forEach(err.response.data, (v, k) => {
+                                        Toast.create.negative(`${k}: ${v}`);
+                                    });
+                                });
+                            }
+                        }
+                    ]
+                });
             }
         },
         filters: {
