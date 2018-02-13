@@ -50,6 +50,12 @@ class Tn(EmbeddedDocument):
     peran_penyetuju = StringField(required=True)
 
 
+class Others(EmbeddedDocument):
+    nama = StringField(default='OTHERS')
+    nomor = StringField(required=True)
+    url = StringField(required=True)
+
+
 class Tugas(Document):
     tanggal = DateTimeField(required=True)
     owner = ReferenceField(Personil, reverse_delete_rule=CASCADE)
