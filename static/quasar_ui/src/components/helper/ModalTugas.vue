@@ -223,6 +223,9 @@
                 const tn = data.filter(el => {
                     return el.nama === 'TECHNICAL NOTE';
                 });
+                const ot = data.filter(el => {
+                    return el.nama === 'OTHERS';
+                });
 
                 if (lk.length > 0) {
                     _.forEach(lk[0], (v, k) => {
@@ -239,6 +242,12 @@
                 if (tn.length > 0) {
                     _.forEach(tn[0], (v, k) => {
                         this.$store.commit('setTn', {nama: k, value: v});
+                    });
+                }
+
+                if (ot.length > 0) {
+                    _.forEach(ot[0], (v, k) => {
+                        this.$store.commit('setOt', {nama: k, value: v});
                     });
                 }
             },
@@ -340,6 +349,7 @@
                 let lk = this.$store.getters.getLkByName();
                 let lb = this.$store.getters.getLbByName();
                 let tn = this.$store.getters.getTnByName();
+                let ot = this.$store.getters.getOtByName();
                 _.forEach(lk, (v, k) => {
                     if (v !== 'LEMBAR KERJA') {
                         this.$store.commit('setLk', {nama: k, value: null});
@@ -352,6 +362,11 @@
                 });
                 _.forEach(tn, (v, k) => {
                     if (v !== 'TECHNICAL NOTE') {
+                        this.$store.commit('setLb', {nama: k, value: null});
+                    }
+                });
+                _.forEach(ot, (v, k) => {
+                    if (v !== 'OTHERS') {
                         this.$store.commit('setLb', {nama: k, value: null});
                     }
                 });
