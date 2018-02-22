@@ -14,7 +14,9 @@
         <q-tab-pane name="tn">
             <app-tn></app-tn>
         </q-tab-pane>
-        <q-tab-pane name="ot">Konten lainnya</q-tab-pane>
+        <q-tab-pane name="ot">
+            <app-others></app-others>
+        </q-tab-pane>
     </q-tabs>
 </template>
 
