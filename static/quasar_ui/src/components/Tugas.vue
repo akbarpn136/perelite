@@ -57,7 +57,7 @@
                             <td data-th="Bukti" class="text-right">
                                 <p v-for="pkt in tugas.paket_tugas">
                                     <a @click.prevent="onPaketTugasClick(pkt, tugas)">
-                                        {{pkt._cls}} {{pkt.nomor}}</a>
+                                        {{pkt.nomor}}</a>
                                 </p>
                             </td>
                         </tr>
@@ -79,6 +79,7 @@
 
 <script>
     import {
+        openURL,
         Dialog,
         QChip,
         QCard,
@@ -154,7 +155,10 @@
                 paketTugas['butir'] = addon.butir;
                 paketTugas['pk'] = addon._id.$oid;
                 this.$store.commit('setTugasRinci', paketTugas);
-                this.$router.push({name: 'rincianTugas', params: {pk: addon._id.$oid}});
+
+                if (paketTugas._cls === 'Others') {
+                    openURL(paketTugas.url);
+                } else this.$router.push({name: 'rincianTugas', params: {pk: addon._id.$oid}});
             },
             refresher(index, done) {
                 setTimeout(() => {
