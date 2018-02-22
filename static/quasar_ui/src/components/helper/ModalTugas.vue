@@ -367,7 +367,7 @@
                 });
                 _.forEach(ot, (v, k) => {
                     if (v !== 'OTHERS') {
-                        this.$store.commit('setLb', {nama: k, value: null});
+                        this.$store.commit('setOt', {nama: k, value: null});
                     }
                 });
             },
