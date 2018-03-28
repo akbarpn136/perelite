@@ -109,7 +109,7 @@
                         <img
                             src="../../../assets/logbook.png"
                             alt="logbook"
-                            v-if="tugas._cls === 'Lk'">
+                            v-if="tugas._cls === 'Lb'">
                         <img
                             src="../../../assets/technicalNote.png"
                             alt="logbook"
