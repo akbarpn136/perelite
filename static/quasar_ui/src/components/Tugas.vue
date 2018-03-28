@@ -34,10 +34,11 @@
                         <tr>
                             <th class="text-right">#</th>
                             <th class="text-left">Uraian kegiatan</th>
-                            <th class="text-right">Tanggal</th>
                             <th class="text-right">Butir</th>
-                            <th class="text-right">Satuan</th>
+                            <th class="text-right">Tanggal</th>
+                            <th class="text-right">Angka</th>
                             <th class="text-right">Bukti</th>
+                            <th class="text-right">Satuan</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -51,15 +52,16 @@
                             </q-context-menu>
                             <td data-th="#" class="text-right">{{idx+1}}</td>
                             <td data-th="Uraian kegiatan" class="text-left">{{tugas.uraian_singkat}}</td>
-                            <td data-th="Tanggal" class="text-right">{{tugas.tanggal.$date | tgl}}</td>
                             <td data-th="Butir" class="text-right">{{tugas.butir}}</td>
-                            <td data-th="Satuan" class="text-right">{{tugas.satuan}}</td>
+                            <td data-th="Tanggal" class="text-right">{{tugas.tanggal.$date | tgl}}</td>
+                            <td data-th="Satuan" class="text-right">{{tugas.angka}}</td>
                             <td data-th="Bukti" class="text-right">
                                 <p v-for="pkt in tugas.paket_tugas">
                                     <a @click.prevent="onPaketTugasClick(pkt, tugas)">
                                         {{pkt.nomor}}</a>
                                 </p>
                             </td>
+                            <td data-th="Satuan" class="text-right">{{tugas.satuan}}</td>
                         </tr>
                         <tr v-if="noData">
                             <td colspan="6" class="text-center">
